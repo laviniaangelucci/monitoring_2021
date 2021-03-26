@@ -101,5 +101,57 @@ plot(p224r63_2011$B3_sre, col=clr)
 clnir <- colorRampPalette(c("red","orange","yellow")) (100)
 plot(p224r63_2011$B4_sre, col=clnir)
 
+#### DAY 4 
+# visualizing data by RGB plotting
+
+library(raster)
+
+setwd("C:/lab/")
+
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
 
+# B1 banda del blu 
+# B2 banda del verde
+# B3 banda del rosso
+# B4 infrarosso vicino 
+# B5 infrarosso medio
+# B6 infrarosso termico 
+# B7 infrarosso medio
+
+# linear stretch 
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+
+# per visualizzare le bande RGB con stretch lineare
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+
+# Exercise: mount a 2x2 multiframe
+par(mfrow=c(2,2)) 
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+
+# il mio primo pdf con R 
+pdf("il_mio_primo_pdf_con_R.pdf")
+par(mfrow=c(2,2))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+dev.off()
+
+# histogram stretch 
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
+
+# par natural colours, flase colours, and false colours with histogram stretching
+par(mfrow=c(3,1))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
