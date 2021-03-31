@@ -110,7 +110,6 @@ setwd("C:/lab/")
 
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
-
 # B1 banda del blu 
 # B2 banda del verde
 # B3 banda del rosso
@@ -155,3 +154,29 @@ par(mfrow=c(3,1))
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
+
+### DAY5 
+
+# Multitemporal set 
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+# cambio data
+p224r63_1988
+p224r63_1988 <- brick("p224r63_1988_masked.grd")
+
+# per plottare le bande RGB con stretch lin 
+plot(p224r63_1988)
+plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin") 
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
+
+# creiamo una matrice delle immagini con funzione PAR
+par(mfrow=c(2,1))
+plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin") 
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
+
+#hist 
+par(mfrow=c(2,2))
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="hist")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")
+
