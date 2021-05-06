@@ -78,3 +78,23 @@ difndvi <- ndvi1 - ndvi2
 cld <- colorRampPalette(c('blue','white','red'))(100) 
 plot(difndvi, col=cld)
 
+
+# DAY 3 
+
+# installiamo il pacchetto di files "rasterdiv" per la visualizzazione di worllwide NDVI  
+install.packages("rasterdiv")
+library(rasterdiv)
+
+# plottiamo il set NDVI (Normalized Difference Vegetation Index)
+plot(copNDVI)
+
+# riclassifichiamo l'immagine originale "copNDVI" in modo che valori di pixel 253:255 risultino NA (non classificati)
+copNDVI <- reclassify(copNDVI, cbind(253:255, NA))
+
+# plottiamo nuovamente l'immagine
+plot(copNDVI)
+
+# utilizziamo il pacchetto " rasterVis" per fare un "levelplot"
+library(rasterVis)
+levelplot(copNDVI)
+ 
