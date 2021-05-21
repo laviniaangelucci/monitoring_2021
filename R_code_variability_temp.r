@@ -1,5 +1,6 @@
-R_code_variability_temp.r
-# settiamo la working directory
+# R_code_variability_temp.r
+
+# settiamo la working directory e le library
 library(raster)
 library(RStoolbox)
 # install.packages("RStoolbox")
@@ -59,3 +60,79 @@ plot(sentpca$map)
 
 # facciamo un "summary" del modello per vedere la proporzione di variabilità spiegata da ogni singola componente
 summary(sentpca$model) # la prima componente spiega il 6736804 % della variabilità totale
+
+## DAY 2 
+
+# settiamo la working directory e le library
+library(raster)
+library(RStoolbox)
+
+# install.packages("RStoolbox")
+setwd("C:/lab/")
+
+# settiamo la library ggplot
+library(ggplot2)
+
+# libreria per plottare ggplot insieme 
+library(gridExtra)
+
+# installiamo la libreria per plottare colorato automaticamente 
+install.packages("viridis")
+library (viridis)
+
+# portiamo in R l'immagine "sentinel.png" attraverso la funzione brik
+sent <- brick("sentinel.png")
+
+# usiamo la funzione PCA e plottiamo l'immagine per fare l'analisi multivariata
+sentpca <- rasterPCA(sent)
+plot(sentpca$map)
+
+# facciamo un "summary" del modello per vedere la proporzione di variabilità spiegata da ogni singola componente
+sentpca
+summary(sentpca$model)
+
+# utilizziamo la funzione focal 3x3 per visualizzare la deviazione standard utilizzando come "oggetto" PC1
+pc1 <- sentpca$map$PC1
+pc1sd3 <- focal (pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+
+# utilizziamo la funzione focal 3x3 per visualizzare la deviazione standard utilizzando come "oggetto" PC1 
+pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
+
+# utiliziamo una color ramppalette e plottiamo l'immagine 
+clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) 
+plot(pc1sd3, col=clsd)
+
+# prepariamo il codice salviamolo nel server e usiamo la funzione "source" per recuperare facilmente il file su R
+# pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
+# clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) # 
+# plot(pc1sd5, col=clsd)
+source("source_test_lezione.r")
+
+# prepariamo un altro codice e portiamolo in r con la funzione "source"
+source("source_ggplot.r")
+
+# attraverso questa funzione individuiamo bene la discontinuità urbana, a livello geologico le diversità geomorfologiche e a livello ecologico indiviuiamo gli ecotoni (passaggi da un ambiente all'altro es bosco, prateria)
+# aggiungiamo a ggplot() con + a una geometria (punti, linee, poligoni, pixel raster ecc..) in questo caso usiamo la funzione geom_raster con oggetto la mappa PCA
+# definiamo le "estetiche" (aes) ossia il layer che vogliamo mappare attraverso la funzione "mapping"
+# le aes avrà coordinate geografiche x y e riempimento: x= x y=y riempimento = layer)
+ggplot() +
+geom_raster(pc1sd3, mapping = aes(x = x, y = y, fill = layer))
+
+# usiamo una delle legende di viridis per dichiarare una colorappalette senza citarla nel codice
+scale_fill_viridis()
+ggtitle("Standard deviation of PC1 by viridis colour scale")
+
+# utiliziamo "magma" come colour scale attraverso la funzione "option = magma"
+ggplot() +
+geom_raster(pc1sd3, mapping = aes(x = x, y = y, fill = layer)) +
+scale_fill_viridis(option = "magma") +
+ggtitle("Standard deviation of PC1 by magma colour scale")
+
+# inseriamo più grafici in una pagina attraverso funzione "grid.arrange" e la library "library(gridExtra)"
+grid.arrange(p1, p2, p3, nrow = 1)
+
+ 
+
+
+
+
