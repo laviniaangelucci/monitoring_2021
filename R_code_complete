@@ -14,7 +14,7 @@
 
 #------------------------------------------------------
 
-#R_code_remote_sensing
+# R_code_remote_sensing
 # 1. remote sensing summary first code
 
 # il mio primo codice per il telerilevamento 
@@ -25,19 +25,19 @@ install.packages("raster")
 # funzione library per richiamare il pacchetto raster 
 library(raster)
 
-#indicare la cartella da cui estrarre i dati 
+# indicare la cartella da cui estrarre i dati 
 setwd("C:/lab/")
 
-# funzione brick per importare sul file 
+# funzione brick per importare il file su R e p224r63_2011 <- è il nuovo nome che diamo al nuovo oggetto caricato
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
 # funzione per avere le info sul file 
 p224r63_2011
 
-# funzione plot immagini per visualizzare le varie bande 
+# funzione plot immagini per visualizzare le varie bande con nome precedentemente assegna attraverso funzione brick
 plot(p224r63_2011)
 
-# per sviluppare palette cromatiche sotto forma di vettore (C) e livelli (100)
+# per sviluppare palette cromatiche sotto forma di vettore (C) e livelli (100) con funzione colorrampalette
 cl <- colorRampPalette(c("black","grey","light grey")) (100)
 
 ### DAY 2
@@ -50,21 +50,21 @@ cl <- colorRampPalette(c("black","blue","green","pink","yellow","violet")) (100)
 
 ### DAY 3
 
-#carico pacchetto di dati raster in R
+# carico pacchetto di dati raster in R
 library(raster)
 
 # seleziono la cartella nel mio sistema operativo da cui il software recupera i dati (cartella lab in :C)
 setwd("C:/lab/")
 
-# localizzo i dati
+# localizzo i dati e carico immagini su R con funzione brick per importare il file su R e p224r63_2011 <- è il nome che diamo al nuovo oggetto caricato
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
 # utilizziamo la colorrapmpalette
 cls <- colorRampPalette(c("red","pink","orange","purple")) (200)
+
 plot(p224r63_2011, col=cls)
 
-# interroghiamo l'immagine per vedere tutte le bande di Landsat che la compongono 
-p224r63_2011
+# interroghiamo l'immagine p224r63_2011 per vedere tutte le bande di Landsat che la compongono 
 
 # B1 banda del blu 
 # B2 banda del verde
@@ -77,19 +77,22 @@ p224r63_2011
 # per eliminare la grafica precedente
 dev.off()
 
-# plot band 1 with a predefined colut ramp palette
+# plot band 1 with a predefined colorramppalette, con il $ intendiamo funzione unione in questo caso uniamo l'immagine alla banda B1 (utilizza la funzione di partenza plot(p224r63_2011, col=cl))  
 plot(p224r63_2011$B1_sre, col=cls)
 
-# funzione PAR per banda B1 e B2
+# funzione PAR per banda B1 e B2 con funzione mfrow visualizzi #1=RIGHE #2=COLONNE. Serve a visualizzare le immagini una accanto all’altra nel software
+# serve per fare un settaggio dei parametri grafici per creare una certa grafica che ci interessa.
+# Per esempio se voglio creare 2 schede grafiche una accanto all’altra (tipo voglio visualizzare una grafica per la banda del BLU B1 attraverso plot(p224r63_2011$B1_sre, col=cls) e una del verde attraverso B2  plot(p224r63_2011$B2_sre) In R non posso se non con la funzione PAR
 par(mfrow=c(1,2))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
 
+# funzione par mfrow con #2=RIGHE #1=COLONNE
 par(mfrow=c(2,1))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
 
-# plot the first four bands of Landsat
+# plottiamo 4 bande su R attraverso funzione par mfrow #4=RIGHE e 1=COLONNA
 par(mfrow=c(4,1))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
@@ -137,7 +140,7 @@ p224r63_2011 <- brick("p224r63_2011_masked.grd")
 # B6 infrarosso termico 
 # B7 infrarosso medio
 
-# linear stretch 
+# linear stretch --> il range della rif. è da 0 a 1, ammettiamo che i valori della mia banda vadano però da 0.4 a 0.6, con lo stretch riesci a massimizzare la riflettanza per ottimizzare il colore potrai quindi andare a portare la banda a valori da 0 a 1. Questo meccanismo viene determinato come e con lo STRETCH LINEARE
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 
 # per visualizzare le bande RGB con stretch lineare
@@ -149,7 +152,7 @@ plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 
 plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 
-# Exercise: mount a 2x2 multiframe
+# Exercise: mount a 2x2 multiframe (mf) inseriamo il numero di colonne e righe attraverso cui divdiamo l’immagine 
 par(mfrow=c(2,2)) 
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
@@ -165,7 +168,8 @@ plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 dev.off()
 
-# histogram stretch 
+# histogram stretch permette di “tirare” ancora di più le bande di colore per massimizzare maggiormente la riflettanza 
+# visualizzo bene per esempio le zone umide e quelle in cui c’è presenza di acqua, si utilizza spesso per visualizzare come si muovono incendi. 
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
 
 # par natural colours, flase colours, and false colours with histogram stretching
@@ -178,7 +182,8 @@ plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
 
 # Multitemporal set 
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
-# cambio data
+
+# cambio data utilizzando sempre la funzione brick 
 p224r63_1988
 p224r63_1988 <- brick("p224r63_1988_masked.grd")
 
@@ -192,7 +197,7 @@ par(mfrow=c(2,1))
 plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin") 
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
 
-#hist 
+# facciamo stretch lineare e hist 
 par(mfrow=c(2,2))
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
@@ -208,13 +213,15 @@ plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")
 # greenland increase of temperature 
 # data and code from Emanuela Cosma 
 
+# installiamo i pacchetti file e inseriamoli con library in R 
 install.packages("raster")
 
 library(raster)
 
 setwd("C:/lab/greenland")
 
-# we are using the RASTER function 
+# we are using the RASTER function per creare un pacchetto di layer in immagini raster attraverso il caricamento di singoli dati. 
+# La funzione RASTER è tipo BRICK infatti “usciamo” da R con le virgolette e portiamo dentro R i file che ci interessano attraverso la funzione raster. 
 
 lst_2000 <- raster("lst_2000.tif")
 plot(lst_2000)
@@ -228,7 +235,7 @@ plot(lst_2010)
 lst_2015 <- raster("lst_2015.tif")
 plot(lst_2015)
 
-# funzione PAR per plottare matrice di immagini 
+# funzione PAR per plottare matrice di immagini **guarda riga 83**
 par(mfrow=c(2,2))
 lst_2000 <- raster("lst_2000.tif")
 plot(lst_2000)
@@ -240,12 +247,19 @@ lst_2015 <- raster("lst_2015.tif")
 plot(lst_2015)
 
 # using LIST and PATTERN functions per fare una lista di files raster 
+
 rlist <- list.files(pattern="lst")
 
-# LAPPLY function using list e plottiamo l'immagine
+# LAPPLY function using list e plottiamo l'immagine mi permette di applicare una deterinata funzione 
+# nel nostro caso applichiamo list.files a una lista intera di file raggruppandoli automaticamente in un singolo pacchetto di file
+# quindi abbiamo usato rLIST per accoppiare diversi file e PATTERN con il nome comune dei miei file “ist”. 
+# Risulta sicuramente una funzione molto più compatta e diretta
+
 import <- lapply(rlist,raster)
 
+# attraverso funzione stack importamo la lista precedentemente elaborata con lapply e la nominiamo TGr
 TGr <- stack(import)
+
 plot(TGr)
 
 # DAY 2 
@@ -255,6 +269,7 @@ library(raster)
 setwd("C:/lab/greenland") 
 
 # codice per importare immagini 
+
 rlist <- list.files(pattern="lst")
 rlist
 import <- lapply(rlist,raster)
@@ -262,21 +277,27 @@ import
 TGr <- stack(import)
 TGr
 
-# funzione level plot 
+# funzione level plot serve per plottare immagini tutte insieme
+# la differenza tra levelplot e plot è di tipo ESTETICO con il levelplot sfrutta una gamma di colori più ampia e le immagini sono più definite
+# visualizziamo inoltre i livelli di contorno
+# Si può usare per esempio per visualizzare l’innalzamento della temperatura **guarda groenlandia**
+
 levelplot(TGr)
 
 # plottiamo una singola immagine attraverso il pacchetto "rgdal"
 install.packages("rgdal")
+
+# funzione level plot
 levelplot(TGr$lst_2000)
 
 # usiamo la colorramppalette per riplottare l'immagine
 cl <- colorRampPalette(c("blue","light blue","pink","red"))(100)
 levelplot(TGr, col.regions=cl)
 
-# utiliziamo la funzione names.attr e la funzione main 
+# utiliziamo la funzione names.attr e la funzione main  
 levelplot(TGr,col.regions=cl, names.attr=c("July 2000","July 2005", "July 2010", "July 2015"))
 levelplot(TGr,col.regions=cl, main="LST variation in time",
-          names.attr=c("July 2000","July 2005", "July 2010", "July 2015"))
+names.attr=c("July 2000","July 2005", "July 2010", "July 2015"))
 
 # utiliziamo i dati MELT ricavati attraverso il satellite a microwave
 meltlist <- list.files(pattern="melt")
@@ -288,6 +309,8 @@ melt
 levelplot(melt)
 
 # sottraiamo il primo dato al secondo associando un nome "melttime"
+# per sottrarre due dati tra loro associando un nome comune i file devono essere legati attraverso $ per legare i file nuovi al nostro file interno 
+# lo utilizzo per visualizzare differenze temporali in questo caso dal 1979 al 2007
 melt_amount <- melt$X2007annual_melt - melt$X1979annual_melt
 
 # plottiamo attraverso colorramppalette 
@@ -317,13 +340,15 @@ library(ncdf4)
 setwd("C:/lab/")
 
 # carichiamo il file scaricato da Copernicus in R 
+# (L'albedo di una superficie è la frazione di luce o, più in generale, di radiazione solare incidente che è riflessa in tutte le direzioni)
 albedo <- raster("c_gls_SWI_202104111200_GLOBE_ASCAT_V3.1.1.nc")
 
 # plottiamo attraverso ColorRampPalette
 cl <- colorRampPalette(c('light blue','green','red','yellow'))(100)
 plot(albedo, col=cl)
 
-ricampionamento della variabile albedo attraverso un fattore "fact" per aggregare dati del file in uscita
+# ricampionamento della variabile albedo attraverso un fattore "fact" per aggregare dati del file in uscita
+# la funzione aggregate(xxx, fact=n° celle) permette di unire più celle fra di loro infatti 100 equivale alle celle di pixel che "fondi assieme" 
 # albedores <- aggregate(albedo, fact=100)
 
 # plottiamo la nuova variabile albedores 
@@ -369,15 +394,18 @@ plot(p224r63_2011$B2_sre, p224r63_2011$B1_sre, col="red", pch=19, cex=2)
 
 pairs(p224r63_2011)
 
-# aggregate cells: resampling (ricampionamento)
+# aggregate cells resampling (ricampionamento) **guarda riga 351**
 p224r63_2011res <- aggregate(p224r63_2011, fact=10)
 
+# funzione par 2righe 1colonna **guarda riga 84** con stretch lineare **guarda riga 171**
 par(mfrow=c(2,1))
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="lin")
 plotRGB(p224r63_2011res, r=4, g=3, b=2, stretch="lin")
 
+# funzione raster
 p224r63_2011res_pca <- rasterPCA(p224r63_2011res)
 
+# la funzione summary mostra sommario dati della mappa selezionata unita attraverso $ a model
 summary(p224r63_2011res_pca$model)
 
 # dev.off()
@@ -413,7 +441,7 @@ soc <- unsuperClass(so, nClasses=3)
 # plottiamo l'immagine 
 plot(soc$map)
 
-# "unsupervised classification" dell'immagine con n.20 classi
+# "unsupervised classification" mostra l'indice vegetazionale attraverso una classificazione dell'immagine con n.20 classi di colore
 soc20 <- unsuperClass(so, nClasses=20)
 plot(soc20$map)
 
@@ -434,7 +462,7 @@ library(raster)
 # portiamo l'immagine del Grand Canyon all'interno di R attraverso la funzione "brick" 
 gc <- brick("dolansprings_oli_2013088_canyon_lrg.jpg")
 
-# plottiamo l'immagine attraverso funzione "RGB" con stretch lineare e stretch "hist" che presenta uno "slope" più "ripido" rispetto allo stretching lineare
+# plottiamo l'immagine attraverso funzione "RGB" con stretch lineare e stretch "hist" che presenta uno "slope" più "ripido" rispetto allo stretching lineare **guarda lezioni prec.**
 plotRGB(gc, r=1, g=2, b=3, stretch="lin")
 plotRGB(gc, r=1, g=2, b=3, stretch="hist")
 
@@ -442,7 +470,7 @@ plotRGB(gc, r=1, g=2, b=3, stretch="hist")
 install.packages("RStoolbox")
 library(RStoolbox)
 
-# utiliziamo la funzione "unsuperClass" con n. 2 di classi per classificare l'immagine e plottiamo successivamente
+# utiliziamo la funzione "unsuperClass" con n. 2 di classi di colore per classificare l'immagine e plottiamo successivamente
 gcc2 <- unsuperClass(gc, nClasses=2)
 gcc2
 plot(gcc2$map)
@@ -461,12 +489,19 @@ library(RStoolbox)
 library(ggplot2)
 library(gridExtra)
 setwd("~/lab/")
+#usiamo la funzione brick *guarda prima*
 p224r63 <- brick("p224r63_2011_masked.grd")
+
+# usiamo la funzione stretch lin * guarda prima*
 ggRGB(p224r63,3,2,1, stretch="lin")
 ggRGB(p224r63,4,3,2, stretch="lin")
+
+#immagini p1 e p2 
 p1 <- ggRGB(p224r63,3,2,1, stretch="lin")
 p2 <- ggRGB(p224r63,4,3,2, stretch="lin")
-grid.arrange(p1, p2, nrow = 2) # this needs gridExtra
+
+# utilizzo le immagini p1 e p2 con funzione grid.arrange mrow2 per visualizzarle 
+grid.arrange(p1, p2, nrow = 2)
 
 #--------------------------------
 
@@ -494,7 +529,7 @@ par(mfrow=c(2,1))
 plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
 plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
 
-# b1 = NIR b2 = red b3 = green
+# b1 = NIR  b2 = RED  b3 = GREEN
  
  # usiamo la "different vegetation index" dell'immagine 1 div1 per ottenere un immagine e visualizzare differenza dell'infrarosso e il rosso 
  dvi1 <- defor1$defor1.1 - defor1$defor1.2
