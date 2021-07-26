@@ -1,0 +1,736 @@
+# R_code_complete_telerilevamento geoecologico 2020/2021
+
+# SUMMARY 
+# 1. remote sensing summary first code
+# 2. R code time series second code
+# 3. R code dopernicus third code
+# 4. R code knit R fourth code
+# 5. R code multivariat analysis fifth code (MANCA)
+# 6. R code classification sixth code
+# 7. R code ggplot2 seventh code 
+# 8. R code vegetation index eighth code
+# 9. R code land cover ninth code
+# 10. R code variability tenth code
+
+#------------------------------------------------------
+
+#R_code_remote_sensing
+# 1. remote sensing summary first code
+
+# il mio primo codice per il telerilevamento 
+
+# codice per installazione pacchetti aggiuntivi raster 
+install.packages("raster")
+
+# funzione library per richiamare il pacchetto raster 
+library(raster)
+
+#indicare la cartella da cui estrarre i dati 
+setwd("C:/lab/")
+
+# funzione brick per importare sul file 
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+
+# funzione per avere le info sul file 
+p224r63_2011
+
+# funzione plot immagini per visualizzare le varie bande 
+plot(p224r63_2011)
+
+# per sviluppare palette cromatiche sotto forma di vettore (C) e livelli (100)
+cl <- colorRampPalette(c("black","grey","light grey")) (100)
+
+### DAY 2
+
+# per plottare immagine con colore selezionato dalla nostra legenda personale
+plot(p224r63_2011, col=cl)
+
+# per cambiare colori aggiungine altri al punto 22
+cl <- colorRampPalette(c("black","blue","green","pink","yellow","violet")) (100)
+
+### DAY 3
+
+#carico pacchetto di dati raster in R
+library(raster)
+
+# seleziono la cartella nel mio sistema operativo da cui il software recupera i dati (cartella lab in :C)
+setwd("C:/lab/")
+
+# localizzo i dati
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+
+# utilizziamo la colorrapmpalette
+cls <- colorRampPalette(c("red","pink","orange","purple")) (200)
+plot(p224r63_2011, col=cls)
+
+# interroghiamo l'immagine per vedere tutte le bande di Landsat che la compongono 
+p224r63_2011
+
+# B1 banda del blu 
+# B2 banda del verde
+# B3 banda del rosso
+# B4 infrarosso vicino 
+# B5 infrarosso medio
+# B6 infrarosso termico 
+# B7 infrarosso medio
+
+# per eliminare la grafica precedente
+dev.off()
+
+# plot band 1 with a predefined colut ramp palette
+plot(p224r63_2011$B1_sre, col=cls)
+
+# funzione PAR per banda B1 e B2
+par(mfrow=c(1,2))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+
+par(mfrow=c(2,1))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+
+# plot the first four bands of Landsat
+par(mfrow=c(4,1))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+plot(p224r63_2011$B3_sre)
+plot(p224r63_2011$B4_sre)
+
+# a quadrat of bands
+par(mfrow=c(2,2))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+plot(p224r63_2011$B3_sre)
+plot(p224r63_2011$B4_sre)
+
+# color ramp palette del blu per B1
+par(mfrow=c(2,2))
+clb <- colorRampPalette(c("dark blue","blue","light blue")) (100)
+plot(p224r63_2011$B1_sre, col=clb)
+
+# color ramp palette del blu per B2
+clg <- colorRampPalette(c("dark green","green","light green")) (100)
+plot(p224r63_2011$B2_sre, col=clg)
+
+# color ramp palette del rosso per B3
+clr <- colorRampPalette(c("dark red","red","pink")) (100)
+plot(p224r63_2011$B3_sre, col=clr)
+     
+# color ramp palette dell'infrarosso per B4 
+clnir <- colorRampPalette(c("red","orange","yellow")) (100)
+plot(p224r63_2011$B4_sre, col=clnir)
+
+#### DAY 4 
+# visualizing data by RGB plotting
+
+library(raster)
+
+setwd("C:/lab/")
+
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+
+# B1 banda del blu 
+# B2 banda del verde
+# B3 banda del rosso
+# B4 infrarosso vicino 
+# B5 infrarosso medio
+# B6 infrarosso termico 
+# B7 infrarosso medio
+
+# linear stretch 
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+
+# per visualizzare le bande RGB con stretch lineare
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+
+# Exercise: mount a 2x2 multiframe
+par(mfrow=c(2,2)) 
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+
+# il mio primo pdf con R 
+pdf("il_mio_primo_pdf_con_R.pdf")
+par(mfrow=c(2,2))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+dev.off()
+
+# histogram stretch 
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
+
+# par natural colours, flase colours, and false colours with histogram stretching
+par(mfrow=c(3,1))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
+
+### DAY5 
+
+# Multitemporal set 
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+# cambio data
+p224r63_1988
+p224r63_1988 <- brick("p224r63_1988_masked.grd")
+
+# per plottare le bande RGB con stretch lin 
+plot(p224r63_1988)
+plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin") 
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
+
+# creiamo una matrice delle immagini con funzione PAR
+par(mfrow=c(2,1))
+plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin") 
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
+
+#hist 
+par(mfrow=c(2,2))
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="hist")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")
+
+# -------------------------------------------------------
+
+# R_code_time_series 
+# 2. R code time series second code
+
+# time series analysis 
+# greenland increase of temperature 
+# data and code from Emanuela Cosma 
+
+install.packages("raster")
+
+library(raster)
+
+setwd("C:/lab/greenland")
+
+# we are using the RASTER function 
+
+lst_2000 <- raster("lst_2000.tif")
+plot(lst_2000)
+
+lst_2005 <- raster("lst_2005.tif")
+plot(lst_2005)
+
+lst_2010 <- raster("lst_2010.tif")
+plot(lst_2010)
+
+lst_2015 <- raster("lst_2015.tif")
+plot(lst_2015)
+
+# funzione PAR per plottare matrice di immagini 
+par(mfrow=c(2,2))
+lst_2000 <- raster("lst_2000.tif")
+plot(lst_2000)
+lst_2005 <- raster("lst_2005.tif")
+plot(lst_2005)
+lst_2010 <- raster("lst_2010.tif")
+plot(lst_2010)
+lst_2015 <- raster("lst_2015.tif")
+plot(lst_2015)
+
+# using LIST and PATTERN functions per fare una lista di files raster 
+rlist <- list.files(pattern="lst")
+
+# LAPPLY function using list e plottiamo l'immagine
+import <- lapply(rlist,raster)
+
+TGr <- stack(import)
+plot(TGr)
+
+# DAY 2 
+
+library(rasterVis)
+library(raster)
+setwd("C:/lab/greenland") 
+
+# codice per importare immagini 
+rlist <- list.files(pattern="lst")
+rlist
+import <- lapply(rlist,raster)
+import
+TGr <- stack(import)
+TGr
+
+# funzione level plot 
+levelplot(TGr)
+
+# plottiamo una singola immagine attraverso il pacchetto "rgdal"
+install.packages("rgdal")
+levelplot(TGr$lst_2000)
+
+# usiamo la colorramppalette per riplottare l'immagine
+cl <- colorRampPalette(c("blue","light blue","pink","red"))(100)
+levelplot(TGr, col.regions=cl)
+
+# utiliziamo la funzione names.attr e la funzione main 
+levelplot(TGr,col.regions=cl, names.attr=c("July 2000","July 2005", "July 2010", "July 2015"))
+levelplot(TGr,col.regions=cl, main="LST variation in time",
+          names.attr=c("July 2000","July 2005", "July 2010", "July 2015"))
+
+# utiliziamo i dati MELT ricavati attraverso il satellite a microwave
+meltlist <- list.files(pattern="melt")
+melt_import <- lapply(meltlist,raster)
+melt <- stack(melt_import)
+melt
+
+# facciamo il levelplot del meltlist 
+levelplot(melt)
+
+# sottraiamo il primo dato al secondo associando un nome "melttime"
+melt_amount <- melt$X2007annual_melt - melt$X1979annual_melt
+
+# plottiamo attraverso colorramppalette 
+clb <- colorRampPalette(c("blue","white","red"))(100)
+plot(melt_amount, col=clb)
+
+# facciamo un levelplot dell'argomento (melt_amount) 
+levelplot(melt_amount, col.regions=clb)
+
+#-------------------------------------------------------
+
+# R_code_copernicus
+# 3. R code dopernicus third code
+
+# R_code_copernicus.r
+# visualizing Copernicus data
+
+# library(raster)
+
+# installiamo il nuovo pacchetto in R 
+install.packages("ncdf4")
+
+# Carico il nuovo pacchetto in R 
+library(ncdf4)
+
+# selezioniamo la cartella lab 
+setwd("C:/lab/")
+
+# carichiamo il file scaricato da Copernicus in R 
+albedo <- raster("c_gls_SWI_202104111200_GLOBE_ASCAT_V3.1.1.nc")
+
+# plottiamo attraverso ColorRampPalette
+cl <- colorRampPalette(c('light blue','green','red','yellow'))(100)
+plot(albedo, col=cl)
+
+ricampionamento della variabile albedo attraverso un fattore "fact" per aggregare dati del file in uscita
+# albedores <- aggregate(albedo, fact=100)
+
+# plottiamo la nuova variabile albedores 
+plot(albedores, col=cl)
+
+#----------------------------------
+
+# R_code_knit_R
+# 4. R code knit R fourth code
+
+# R_code_knitr.r
+
+# inseriamo i dati in R dalla cartella lab 
+setwd("C:/lab/")
+
+library(knitr)
+
+# generare report partendo da script .r
+stitch("R_code_time_series.r", template=system.file("misc", "knitr-template.Rnw", package="knitr"))
+
+#-------------------------------------------------------------
+
+ # R_code_multivariate_analysis 
+ # 5. R code multivariate analysis fourth code 
+ 
+ #-------------------------------------------------------------
+ 
+ # R_code_classification 
+ # 6. R code classification fifth code 
+ 
+ # R_code_classification.r
+
+# DAY 1 SOLAR ORBITER
+
+# settiamo la working directory che stiamo utilizzando 
+setwd("C:/lab/")
+library(raster)
+
+# usiamo la funzione brick per importare su R i dati del pacchetto raster
+so <- brick("Solar_Orbiter_s_first_views_of_the_Sun_pillars.jpg")
+so
+
+# visualiziamo i tre livelli RGB dell'immagine attraverso la funzione PLOT con stretch lineare
+plotRGB(so, 1, 2, 3, stretch="lin")
+
+# installiamo RStoolbox 
+install.packages("RStoolbox")
+library(RStoolbox)
+
+# "unsupervised classification" dell'immagine con n.3 classi
+soc <- unsuperClass(so, nClasses=3)
+
+# plottiamo l'immagine 
+plot(soc$map)
+
+# "unsupervised classification" dell'immagine con n.20 classi
+soc20 <- unsuperClass(so, nClasses=20)
+plot(soc20$map)
+
+# scarichiamo immagine dal programma "SolarOrbiter"
+https://www.esa.int/ESA_Multimedia/Missions/Solar_Orbiter/(result_type)/images
+
+# portiamo l'immagine all'interno di R e plottiamo l'immagine con n.20 classi
+sun <- brick("sun.png") 
+sunc <- unsuperClass(sun, nClasses=20)
+plot(sun.png$map)
+
+# DAY 2 GRAND CANYON
+
+# settiamo la working directory 
+ setwd("C:/lab/")
+library(raster)
+
+# portiamo l'immagine del Grand Canyon all'interno di R attraverso la funzione "brick" 
+gc <- brick("dolansprings_oli_2013088_canyon_lrg.jpg")
+
+# plottiamo l'immagine attraverso funzione "RGB" con stretch lineare e stretch "hist" che presenta uno "slope" più "ripido" rispetto allo stretching lineare
+plotRGB(gc, r=1, g=2, b=3, stretch="lin")
+plotRGB(gc, r=1, g=2, b=3, stretch="hist")
+
+# installo RStoolbox 
+install.packages("RStoolbox")
+library(RStoolbox)
+
+# utiliziamo la funzione "unsuperClass" con n. 2 di classi per classificare l'immagine e plottiamo successivamente
+gcc2 <- unsuperClass(gc, nClasses=2)
+gcc2
+plot(gcc2$map)
+
+# utiliziamo la funzione di classificazione con n.4 di classi e plottiamo succesivamente 
+gcc4 <- unsuperClass(gc, nClasses=4)
+plot(gcc4$map)
+
+#--------------------------------------------------------------------------
+
+# R_code_ggplot2 
+# 7. R code ggplot 2 seventh code
+
+library(raster)
+library(RStoolbox)
+library(ggplot2)
+library(gridExtra)
+setwd("~/lab/")
+p224r63 <- brick("p224r63_2011_masked.grd")
+ggRGB(p224r63,3,2,1, stretch="lin")
+ggRGB(p224r63,4,3,2, stretch="lin")
+p1 <- ggRGB(p224r63,3,2,1, stretch="lin")
+p2 <- ggRGB(p224r63,4,3,2, stretch="lin")
+grid.arrange(p1, p2, nrow = 2) # this needs gridExtra
+
+#--------------------------------
+
+# R_code_vegetetion_index
+# 8. R code vegetation index eighth code
+
+# DAY 1 missing 
+
+# DAY 2 
+
+# carichiamo i pacchetti raster di nostro interesse
+library(raster)
+# for vegetation indices calculation
+library(RStoolbox) 
+
+# set della workingdirectory 
+setwd("C:/lab/") 
+
+# lavoriamo con immagini della foresta amazonica di NASA portiamo all'interno di R le immagini con funzione "brick"
+defor1 <- brick("defor1.jpg")
+defor2 <- brick("defor2.jpg")
+
+# plottiamo le immagini con funzione "par" per visualizzarle insieme e RGB con stretch lineare
+par(mfrow=c(2,1))
+plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
+plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
+
+# b1 = NIR b2 = red b3 = green
+ 
+ # usiamo la "different vegetation index" dell'immagine 1 div1 per ottenere un immagine e visualizzare differenza dell'infrarosso e il rosso 
+ dvi1 <- defor1$defor1.1 - defor1$defor1.2
+
+# plottiamo l'immagine dvi1 con la funzione "plot" 
+plot(dvi1) 
+
+#  cambiamo la colorramppalette 
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100)
+
+# plottiamo l'immagine dvi1 con funzione "plot"
+plot(dvi1, col=cl)
+plot(dvi1, col=cl, main="DVI at time 1")
+
+# usiamo la "different vegetation index" dell'immagine dvi2 e plottiamo
+dvi2 <- defor2$defor2.1 - defor2$defor2.2
+plot(dvi2, col=cl, main="DVI at time 2")
+
+# analisi multitemporale usando la funzione "par" per visualizzare dvi1 e dvi2 insieme 
+par(mfrow=c(2,1))
+plot(dvi1, col=cl, main="DVI at time 1")
+plot(dvi2, col=cl, main="DVI at time 2")
+
+usiamo la funzione "div" per fare la sottrazione tra dvi1 e dvi2 ottentendo una differenza temporale tra le due mappe 
+difdvi <- dvi1 - dvi2
+
+# plottiamo con una nuova colorramppalette notiamo in rosso le zone più antropizzate e sottoposte a deforestazione nel tempo 
+cld <- colorRampPalette(c('blue','white','red'))(100)
+plot(difdvi, col=cld)
+
+# con la funzione "Ndvi1" possiamo visualizzare immagini con funzione radiometrica diversa con range possibile da 1 a -1
+# la funzione ndvi si calcola = (NIR - RED) / (NIR + RED)
+ndvi1 <- (defor1$defor1.1 - defor1$defor1.2) / (defor1$defor1.1 + defor1$defor1.2)
+
+# plottiamo con colorramppalette 
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100)
+plot(ndvi1, col=cl)
+
+# plottiamo l'immagine con la funzione "Ndvi2"
+ndvi2 <- (defor2$defor2.1 - defor2$defor2.2) / (defor2$defor2.1 + defor2$defor2.2)
+plot(ndvi2, col=cl)
+
+# carichiamo il pacchetto RStoolbox
+library(RStoolbox) 
+
+# usiamo la funzione "spectral indices" con "vi1" e plottiamo con la colorramppalette "col"
+vi <- spectralIndices(defor1, green = 3, red = 2, nir = 1)
+plot(vi, col=cl)
+
+# usciamo la funzioe "spectral indices" con "vi2" e plottiamo
+vi2 <- spectralIndices(defor2, green = 3, red = 2, nir = 1)
+plot(vi2, col=cl)
+
+plottiamo con la funzione ndvi
+difndvi <- ndvi1 - ndvi2
+cld <- colorRampPalette(c('blue','white','red'))(100) 
+plot(difndvi, col=cld)
+
+
+# DAY 3 
+
+# installiamo il pacchetto di files "rasterdiv" per la visualizzazione di worllwide NDVI  
+install.packages("rasterdiv")
+library(rasterdiv)
+
+# plottiamo il set NDVI (Normalized Difference Vegetation Index)
+plot(copNDVI)
+
+# riclassifichiamo l'immagine originale "copNDVI" in modo che valori di pixel 253:255 risultino NA (non classificati)
+copNDVI <- reclassify(copNDVI, cbind(253:255, NA))
+
+# plottiamo nuovamente l'immagine
+plot(copNDVI)
+
+# utilizziamo il pacchetto " rasterVis" per fare un "levelplot"
+library(rasterVis)
+levelplot(copNDVI)
+ 
+ #-------------------------------------------
+ 
+ # R_code_land_cover
+ # 9. R code land cover ninth code 
+
+# R_code_land_cover.r
+library(raster)
+library(RStoolbox)
+library(ggplot2)
+
+# inseriamo la workingdirectory
+setwd("C:/lab/")
+
+# richiamiamo le librerie dati "raster" e "RStoolbox" per fare la classificazione 
+library(raster)
+library(RStoolbox)
+
+# installiamo il pacchetto ggplot e richiamiamo un altra libreria "ggplot"
+install.packages("ggplot2")
+library(ggplot2)
+
+# richiamiamo il dataset defort1 attraverso la funzione "brick"  
+defor1 <- brick("defor1.png")
+
+# plottiamo con la funzione RGB NIR 1 RED 2 GREEN 3
+plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
+
+# carichiamo il dataset defort2 attraverso la funzione "brick"
+defor2 <- brick("defor2.png")
+
+# plottiamo con la funzione RGB NIR 1 RED 2 GREEN 3 
+plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
+
+# utiliziamo la funzione ggplot per plottare con funzione RGB a partire da 3 "rasterlayer" con stretch lineare
+ggRGB(defor2, r=1, g=2, b=3, stretch="lin")
+
+# usiamo la funzione "par" per plottare defort1 e defort2 insieme attraverso il plot con funzione "plotRGB" 
+par(mfrow=c(1,2))
+plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
+plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
+
+# installiamo "GreenExtra" che permette di utilizzare ggplot per dati raster
+install.packages("gridExtra")
+library(gridExtra)
+
+# facciamo un multiframe per visualizzare defort1 e defort2 insieme attraverso la funzione "ggplot" e "grid.arrange" (mette insieme diverse sezioni all'interno del grafico in R)
+p1 <- ggRGB(defor1, r=1, g=2, b=3, stretch="lin")
+p2 <- ggRGB(defor2, r=1, g=2, b=3, stretch="lin")
+grid.arrange(p1, p2, nrow=2)
+
+#-------------------------------------------
+
+# R_code_variabiliy 
+# 10. R code variability tenth code
+
+# R_code_variability_temp.r
+
+# settiamo la working directory e le library
+library(raster)
+library(RStoolbox)
+# install.packages("RStoolbox")
+setwd("C:/lab/")
+
+# portiamo in R l'immagine "sentinel.png" attraverso la funzione brik
+sent <- brick("sentinel.png")
+ 
+# plottiamo l'immagine attraverso la funzione RGB
+# NIR=1 RED=2 BLU=3 
+#con r=1 b=2 g=3 e stretch="lin"
+plotRGB(sent, stretch="lin")
+
+# calcoliamo il layer NDVI (ovvero la differenza tra NIR infrared e red fratto la loro differenza)
+# associamo le due bande NIR e RED alle due immagini 
+nir <- sent$sentinel.1
+red <- sent$sentinel.2
+
+# costruiamo quindi la funzione NDVI e plottiamo l'immagine 
+ndvi <- (nir-red) / (nir+red)
+plot(ndvi)
+
+# cambiamo la colorramppalette 
+cl <- colorRampPalette(c('black','white','red','magenta','green'))(100)  
+plot(ndvi,col=cl)
+
+# calcoliamo la deviazione standard utilizzando la funzione "focal" e la funzione "window" (w=) 
+ndvisd3 <- focal(ndvi, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+
+# plottiamo l'immagine 
+plot(ndvisd3)
+
+# utilizziamo una "colorrampopalette" differente per apprezzare meglio la variazione della deviazione standard
+clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) 
+plot(ndvisd3, col=clsd)
+ 
+ # facciamo la media di ndvi con 3x3 pixel utilizzando la funzione "focal"
+ndvimean3 <- focal(ndvi, w=matrix(1/9, nrow=3, ncol=3), fun=mean)
+
+# plottiamo l'immagine con la nostra colorampopalette
+clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) # 
+plot(ndvimean3, col=clsd)
+
+# facciamo la media ndvi con 13x13 pixel con la funzione "focal" e plottiamo 
+ndvimean13 <- focal(ndvi, w=matrix(1/269, nrow=13, ncol=13), fun=mean)
+plot(ndvimean13, col=clsd)
+
+# cambiamo la grandezza della "moving window" con deviazione standard 5x5 pixel e plottiamo
+ndvimean5 <- focal(ndvi, w=matrix(1/25, nrow=5, ncol=5), fun=mean)
+plot(ndvimean5, col=clsd)
+
+# usiamo la funzione PCA per fare analisi multivariata 
+sentpca <- rasterPCA(sent)
+
+# plottiamo l'immagine 
+plot(sentpca$map)
+
+# facciamo un "summary" del modello per vedere la proporzione di variabilità spiegata da ogni singola componente
+summary(sentpca$model) # la prima componente spiega il 6736804 % della variabilità totale
+
+## DAY 2 
+
+# settiamo la working directory e le library
+library(raster)
+library(RStoolbox)
+
+# install.packages("RStoolbox")
+setwd("C:/lab/")
+
+# settiamo la library ggplot
+library(ggplot2)
+
+# libreria per plottare ggplot insieme 
+library(gridExtra)
+
+# installiamo la libreria per plottare colorato automaticamente 
+install.packages("viridis")
+library (viridis)
+
+# portiamo in R l'immagine "sentinel.png" attraverso la funzione brik
+sent <- brick("sentinel.png")
+
+# usiamo la funzione PCA e plottiamo l'immagine per fare l'analisi multivariata
+sentpca <- rasterPCA(sent)
+plot(sentpca$map)
+
+# facciamo un "summary" del modello per vedere la proporzione di variabilità spiegata da ogni singola componente
+sentpca
+summary(sentpca$model)
+
+# utilizziamo la funzione focal 3x3 per visualizzare la deviazione standard utilizzando come "oggetto" PC1
+pc1 <- sentpca$map$PC1
+pc1sd3 <- focal (pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+
+# utilizziamo la funzione focal 3x3 per visualizzare la deviazione standard utilizzando come "oggetto" PC1 
+pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
+
+# utiliziamo una color ramppalette e plottiamo l'immagine 
+clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) 
+plot(pc1sd3, col=clsd)
+
+# prepariamo il codice salviamolo nel server e usiamo la funzione "source" per recuperare facilmente il file su R
+# pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
+# clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) # 
+# plot(pc1sd5, col=clsd)
+source("source_test_lezione.r")
+
+# prepariamo un altro codice e portiamolo in r con la funzione "source"
+source("source_ggplot.r")
+
+# attraverso questa funzione individuiamo bene la discontinuità urbana, a livello geologico le diversità geomorfologiche e a livello ecologico indiviuiamo gli ecotoni (passaggi da un ambiente all'altro es bosco, prateria)
+# aggiungiamo a ggplot() con + a una geometria (punti, linee, poligoni, pixel raster ecc..) in questo caso usiamo la funzione geom_raster con oggetto la mappa PCA
+# definiamo le "estetiche" (aes) ossia il layer che vogliamo mappare attraverso la funzione "mapping"
+# le aes avrà coordinate geografiche x y e riempimento: x= x y=y riempimento = layer)
+ggplot() +
+geom_raster(pc1sd3, mapping = aes(x = x, y = y, fill = layer))
+
+# usiamo una delle legende di viridis per dichiarare una colorappalette senza citarla nel codice
+scale_fill_viridis()
+ggtitle("Standard deviation of PC1 by viridis colour scale")
+
+# utiliziamo "magma" come colour scale attraverso la funzione "option = magma"
+ggplot() +
+geom_raster(pc1sd3, mapping = aes(x = x, y = y, fill = layer)) +
+scale_fill_viridis(option = "magma") +
+ggtitle("Standard deviation of PC1 by magma colour scale")
+
+# inseriamo più grafici in una pagina attraverso funzione "grid.arrange" e la library "library(gridExtra)"
+grid.arrange(p1, p2, p3, nrow = 1)
+
+ 
+
+
+
+
+
+
