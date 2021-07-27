@@ -1,0 +1,23 @@
+# R_code_exam_LaviniaAngelucci
+
+INVESTIGHIAMO UN OGGETTO PRIMA DI INIZIARE UN PROGETTO 
+#settiamo la working directory
+library(raster)
+setwd("C:/pt/")
+
+# usiamo la funzione brick per importare l'immagine 043 laguna di venezia in pt su :C
+laguna_13a_02g <- brick("043.jpg")
+
+names      : X043.1, X043.2, X043.3  queste sono le bande 
+
+#plottiamo l'immagine
+plot(laguna_13a_02g)
+# si evidenzia una differenza a livello dell'acqua, potrebbe essere torbidità? lo andiamo a scoprire dopo 
+# può essere che la torbidità rifletta di più in una di quelle tre bande x043.1 x043.2 x043.3
+
+# conviene utilizzare la funzione RGB in quanto partiamo da una immagine "reale" 
+# nota che in questo caso la banda near infrared non è possibile inserirla (perchè banda 4)
+plotRGB(laguna_13a_02g, r=3, g=2, b=1)
+
+# montiamo le bande in modo diverso 
+plotRGB(laguna_13a_02g)
