@@ -8,7 +8,8 @@ setwd("C:/pt/")
 # usiamo la funzione brick per importare l'immagine 043 laguna di venezia in pt su :C
 laguna_13a_02g <- brick("043.jpg")
 
-names      : X043.1, X043.2, X043.3  queste sono le bande 
+# names      : X043.1, X043.2, X043.3  queste sono le bande 
+# crs        : NA NON è GEOREFERENZIATA!!!!!
 
 #plottiamo l'immagine
 plot(laguna_13a_02g)
