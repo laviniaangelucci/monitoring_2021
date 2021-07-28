@@ -140,7 +140,7 @@ p224r63_2011 <- brick("p224r63_2011_masked.grd")
 # B6 infrarosso termico 
 # B7 infrarosso medio
 
-# linear stretch --> il range della rif. è da 0 a 1, ammettiamo che i valori della mia banda vadano però da 0.4 a 0.6, con lo stretch riesci a massimizzare la riflettanza per ottimizzare il colore potrai quindi andare a portare la banda a valori da 0 a 1. Questo meccanismo viene determinato come e con lo STRETCH LINEARE
+# linear stretch --> il range della rif. è da 0 a 1, ammettiamo che i valori della mia banda vadano però da 0.4 a 0.6, con lo stretch riesci a massimizzare la riflettanza per ottimizzare il colore potrai quindi andare a portare la banda a valori da 0 a 1. 
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 
 # per visualizzare le bande RGB con stretch lineare
