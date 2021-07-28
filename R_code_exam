@@ -77,6 +77,20 @@ fg2b_mar11
 #min values :             0,             0,             0 
 #max values :           255,           255,           255 
 
+# faccio la stessa cosa con fig2a 20febbraio 
+fg2a_feb20<- brick("fig2a_wgs84.tif")
+plot(fg2a_feb20)
+fg2a_feb20
+#class      : RasterBrick 
+#dimensions : 712, 377, 268424, 3  (nrow, ncol, ncell, nlayers)
+#resolution : 1, 1  (x, y)
+#extent     : 0, 377, -712, 0  (xmin, xmax, ymin, ymax)
+#crs        : +proj=longlat +datum=WGS84 +no_defs 
+#source     : C:/pt/fig2a_wgs84.tif 
+#names      : fig2a_wgs84.1, fig2a_wgs84.2, fig2a_wgs84.3 
+#min values :             0,             0,             0 
+#max values :           255,           255,           255 
+
 # ho georeferenziato tutte le immagini fg2a fg2b fg2c
 # plot(nome dell'immagine,add=TRUE) plotta cose una sopra l'altra 
 
