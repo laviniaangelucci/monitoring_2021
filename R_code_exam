@@ -1,24 +1,85 @@
 # R_code_exam_LaviniaAngelucci
 
 INVESTIGHIAMO UN OGGETTO PRIMA DI INIZIARE UN PROGETTO 
+# PROVA NUMERO 1 --------------------------------------------------------------------
 #settiamo la working directory
-library(raster)
-setwd("C:/pt/")
+#library(raster)
+#setwd("C:/pt/")
 
 # usiamo la funzione brick per importare l'immagine 043 laguna di venezia in pt su :C
-laguna_13a_02g <- brick("043.jpg")
+#laguna_13a_02g <- brick("043.jpg")
 
 # names      : X043.1, X043.2, X043.3  queste sono le bande 
 # crs        : NA NON è GEOREFERENZIATA!!!!!
 
 #plottiamo l'immagine
-plot(laguna_13a_02g)
+#plot(laguna_13a_02g)
 # si evidenzia una differenza a livello dell'acqua, potrebbe essere torbidità? lo andiamo a scoprire dopo 
 # può essere che la torbidità rifletta di più in una di quelle tre bande x043.1 x043.2 x043.3
 
 # conviene utilizzare la funzione RGB in quanto partiamo da una immagine "reale" 
 # nota che in questo caso la banda near infrared non è possibile inserirla (perchè banda 4)
-plotRGB(laguna_13a_02g, r=3, g=2, b=1)
+#plotRGB(laguna_13a_02g, r=3, g=2, b=1)
+#plotrgb
+#plotRGB(laguna_13a_02g)
+#----------------------------------------------------------------------------------------
 
-# montiamo le bande in modo diverso 
-plotRGB(laguna_13a_02g)
+# PROVO CON IMMAGINE fig2a
+#settiamo la working directory sia la library raster che rgdal
+
+library(raster)
+setwd("C:/pt/")
+library(rgdal)
+
+# ho importato l'immagine per vedere se georeferenziata
+# lagoon_20feb <- brick("fig2a.png")
+# classificazione 
+#class      : RasterBrick 
+#dimensions : 712, 377, 268424, 3  (nrow, ncol, ncell, nlayers)
+#resolution : 1, 1  (x, y)
+#extent     : 0, 377, 0, 712  (xmin, xmax, ymin, ymax)
+#crs        : NA 
+#source     : C:/pt/fig2a.png 
+#names      : fig2a.1, fig2a.2, fig2a.3 
+#min values :       0,       0,       0 
+#max values :     255,     255,     255 
+
+# FACCIO RGB X VEDERE BANDE
+# plotRGB(lagoon_20feb, r=3, g=2, b=1)
+
+# PROVO CON IMMAGINE GEOREFERENZIATA SU QGIS 
+
+#chiamo la library rgdal
+# library(rgdal) **GIà CHIAMATA ALL'INIZIO**
+
+# chiamo lo shapefile precedentemente georeferenziato su gis (questo è lo shape file poligono del crop solo su acqua) 
+# verrà applicato su immagini fg2a fg2b fg2c ovvero 20 febbraio, 11 marzo, 19 marzo 2020
+readOGR("files lavinia angelucci.shp")
+
+# rinomino lo shape file (questo è solo il poligono)
+lagoon_shp <- readOGR("files lavinia angelucci.shp")
+
+#plotto il poligono, ossiamo il crop della laguna **guarda riga 46**
+plot(lagoon_shp)
+
+# importo l'immagine del 11 marzo fg2b georeferenziata su qgis con sistema di riferimento wags84 coordinate 4326
+fg2b_mar11<- brick("fig2b_wgs84.tif")
+
+# controllo le proprietà dell'immagine, ORA è GEOREFERENZIATA!!!!
+fg2b_mar11
+#class      : RasterBrick 
+#Dimensions : 712, 388, 276256, 3  (nrow, ncol, ncell, nlayers)
+#resolution : 1, 1  (x, y)
+#extent     : 0, 388, -712, 0  (xmin, xmax, ymin, ymax)
+#crs        : +proj=longlat +datum=WGS84 +no_defs 
+#source     : C:/pt/fig2b_wgs84.tif 
+#names      : fig2b_wgs84.1, fig2b_wgs84.2, fig2b_wgs84.3 
+#min values :             0,             0,             0 
+#max values :           255,           255,           255 
+
+# ho georeferenziato tutte le immagini fg2a fg2b fg2c
+# plot(nome dell'immagine,add=TRUE) plotta cose una sopra l'altra 
+
+#PAYPAL
+#paolo.patrizio7@gmail.com
+
