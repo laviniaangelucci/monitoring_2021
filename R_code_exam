@@ -120,7 +120,7 @@ plot(p1_cropped)
 plot(p2_cropped)
 plot(p3_cropped)
 
-#  unsuperclass n=2 classi
+#  unsuperclass n=5 classi
 
 p1_unclass <- unsuperClass(fg2a_feb20, nClasses=5)
 p2_unclass <- unsuperClass(fg2a_marz11, nClasses=5)
@@ -135,4 +135,25 @@ plot(p3_unclass$map)
 plot(crop(p1_unclass$map,lagoon_shp))
 plot(crop(p2_unclass$map,lagoon_shp))
 plot(crop(p3_unclass$map,lagoon_shp))
+
+# funzione par metto tutte le immagini insieme
+par(mfrow=c(1,3))
+plot(crop(p1_unclass$map,lagoon_shp))
+plot(crop(p2_unclass$map,lagoon_shp))
+plot(crop(p3_unclass$map,lagoon_shp))
+
+
+#PCA, analisi multivariata
+#you take a dataset with many variables, and you simplify that dataset by turning your original variables into a smaller number of "Principal Components".
+
+#installa pacchetto
+install.packages("viridis")
+library (viridis)
+
+# PCA 
+fg2a_marz11<- brick("fig2b_wgs84.tif")
+(fg2b_mar11)
+mar11_pca <- rasterPCA(fg2b_mar11)
+plot(mar11_pca$map)
+
 
