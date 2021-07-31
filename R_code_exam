@@ -122,11 +122,12 @@ plot(p3_cropped)
 
 #  unsuperclass n=5 classi
 
-p1_unclass <- unsuperClass(fg2a_feb20, nClasses=5)
-p2_unclass <- unsuperClass(fg2a_marz11, nClasses=5)
-p3_unclass <- unsuperClass(fg2a_marz19, nClasses=5)
+p1_unclass <- unsuperClass(fg2a_feb20, nClasses=3)
+p2_unclass <- unsuperClass(fg2a_marz11, nClasses=3)
+p3_unclass <- unsuperClass(fg2a_marz19, nClasses=3)
 
-#plotta
+#plotta con par
+ par(mfrow=c(1,3))
 plot(p1_unclass$map)
 plot(p2_unclass$map)
 plot(p3_unclass$map)
@@ -136,11 +137,14 @@ plot(crop(p1_unclass$map,lagoon_shp))
 plot(crop(p2_unclass$map,lagoon_shp))
 plot(crop(p3_unclass$map,lagoon_shp))
 
-# funzione par metto tutte le immagini insieme
+# funzione PAR metto tutte le immagini insieme
 par(mfrow=c(1,3))
 plot(crop(p1_unclass$map,lagoon_shp))
 plot(crop(p2_unclass$map,lagoon_shp))
 plot(crop(p3_unclass$map,lagoon_shp))
+
+
+
 
 
 #PCA, analisi multivariata
@@ -149,11 +153,153 @@ plot(crop(p3_unclass$map,lagoon_shp))
 #installa pacchetto
 install.packages("viridis")
 library (viridis)
+library(raster)
+setwd("C:/pt/")
+library(rgdal)
+library(gridExtra)
+library(RStoolbox)
+library(ggplot2)
 
-# PCA 
+
+
+#MARZO 11  PCA 
 fg2a_marz11<- brick("fig2b_wgs84.tif")
-(fg2b_mar11)
-mar11_pca <- rasterPCA(fg2b_mar11)
-plot(mar11_pca$map)
+#(fg2a_marz11)
+marz11_pca <- rasterPCA(fg2a_marz11)
+#marz11_pca <- fg2a_marz11$map$PC1
+plot(marz11_pca$map)
+
+#plot con crop
+#plot(crop(marz11_pca$map,lagoon_shp))
+
+#FOCAL MOVING WINDOW
+marz11_pc1 <- marz11_pca$map$PC1
+marz11_mw <- focal (marz11_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100)
+plot(marz11_mw, col=clsd)
+
+
+# FEBBRAIO 20 PCA
+fg2a_feb20<- brick("fig2a_wgs84.tif")
+#(fg2a_feb20)
+feb20_pca <- rasterPCA(fg2a_feb20)
+#feb20_pca <- fg2a_feb20$map$PC1
+plot(feb20_pca$map)
+
+#plot con crop
+#plot(crop(marz11_pca$map,lagoon_shp))
+
+#FOCAL MOVING WINDOW
+feb20_pc1 <- feb20_pca$map$PC1
+feb20_mw <- focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100)
+plot(feb20_mw, col=clsd)
+
+
+# MARZO 19
+fg2a_marz19<- brick("fig2c_wgs84.tif")
+marz19_pca <- rasterPCA(fg2a_marz19)
+#marz19_pc1 <- marz19_pca$map$PC1
+plot(marz19_pca$map)
+
+#FOCAL MOVING WINDOW
+marz19_pc1 <- marz19_pca$map$PC1
+marz19_mw <- focal (marz19_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+clsd <- colorRampPalette(c('blue','red','pink','orange','green','yellow'))(100)
+plot(marz19_mw, col=clsd)
+
+
+# faccio un PAR SENZA cropped clramp MOVING WINDOW
+par(mfrow=c(1,3))
+plot(feb20_mw, col=clsd)
+plot(marz11_mw, col=clsd)
+plot(marz19_mw, col=clsd)
+
+
+#PLOT CROPPATO FEB20 MARZ11 MARZ19 MOVING WINDOW
+lagoon_shp <- readOGR ("files lavinia angelucci.shp")
+clsd <- colorRampPalette(c('blue','green','pink','red','orange','yellow'))(100)
+
+feb20mw_cropped <- crop(feb20_mw,lagoon_shp)
+plot(feb20mw_cropped, col=clsd)
+
+marz11mw_cropped <- (crop(marz11_mw,lagoon_shp))
+plot(marz11mw_cropped, col=clsd)
+
+marz19mw_cropped <- (crop(marz19_mw,lagoon_shp))
+plot(marz19mw_cropped, col=clsd)
+
+
+#PAR cropped clramp MOVING WINDOW
+par(mfrow=c(1,3))
+plot(feb20mw_cropped, col=clsd)
+plot(marz11mw_cropped, col=clsd)
+plot(marz19mw_cropped, col=clsd)
+
+
+#SUMMARY DELLE COMPONENTI NON CROPPED
+summary(feb20_pca$model) 
+#                            Comp.1      Comp.2      Comp.3
+#Standard deviation     112.4212153 32.41154082 7.839134229
+#Proportion of Variance   0.9191331  0.07639786 0.004469079
+#Cumulative Proportion    0.9191331  0.99553092 1.000000000
+
+summary(marz19_pca$model)
+#                           Comp.1      Comp.2      Comp.3
+#Standard deviation     69.6829683 21.23681719 7.128451679
+#Proportion of Variance  0.9063343  0.08418098 0.009484742
+#Cumulative Proportion   0.9063343  0.99051526 1.000000000
+
+summary(marz11_pca$model)
+#                           Comp.1      Comp.2      Comp.3
+#Standard deviation     90.6106865 22.61181338 5.727743638
+#Proportion of Variance  0.9378482  0.05840426 0.003747493
+#Cumulative Proportion   0.9378482  0.99625251 1.000000000
+
+
+# FORSE 20 FEBBRAIO C'è PIU' VARIABILITA' dovrei croppare le immagini perchè altrimenti c'è troppo rumore
+
+
+
+# SUMMARY DELLE COMPONENTI CROPPATO --> VALORI SOLO DI ACQUA
+
+# FEBBRAIO 20
+crop(feb20_pca$map,lagoon_shp)
+#plot(crop(feb20_pca$map,lagoon_shp))
+feb20crop <- crop(feb20_pca$map,lagoon_shp)
+feb20crop_pca <- rasterPCA(feb20crop)
+
+summary(feb20crop_pca$model)
+#                            Comp.1      Comp.2      Comp.3
+#Standard deviation     104.6909160 27.94909281 7.469126723
+#Proportion of Variance   0.9290556  0.06621542 0.004728935
+#Cumulative Proportion    0.9290556  0.99527106 1.000000000
+
+# MARZO 19
+crop(marz19_pca$map,lagoon_shp)
+#plot(crop(marz19_pca$map,lagoon_shp))
+marz19crop <- crop(marz19_pca$map,lagoon_shp)
+marz19crop_pca <- rasterPCA(marz19crop)
+
+summary(marz19crop_pca$model)
+#                           Comp.1      Comp.2      Comp.3
+#Standard deviation     64.2115564 18.79066226 6.541294697
+#Proportion of Variance  0.9123971  0.07813429 0.009468582
+#Cumulative Proportion   0.9123971  0.99053142 1.000000000
+
+#MARZO 11
+crop(marz11_pca$map,lagoon_shp)
+#plot(crop(marz11_pca$map,lagoon_shp))
+marz11crop <- crop(marz11_pca$map,lagoon_shp)
+marz11crop_pca <- rasterPCA(marz11crop)
+
+summary(marz19crop_pca$model)
+#                          Comp.1      Comp.2      Comp.3
+#Standard deviation     64.2115564 18.79066226 6.541294697
+#Proportion of Variance  0.9123971  0.07813429 0.009468582
+#Cumulative Proportion   0.9123971  0.99053142 1.000000000
+
+
+
 
 
