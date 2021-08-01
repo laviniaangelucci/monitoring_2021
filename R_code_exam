@@ -120,7 +120,7 @@ plot(p1_cropped)
 plot(p2_cropped)
 plot(p3_cropped)
 
-#  unsuperclass n=5 classi
+#  unsuperclass n=3 classi
 
 p1_unclass <- unsuperClass(fg2a_feb20, nClasses=3)
 p2_unclass <- unsuperClass(fg2a_marz11, nClasses=3)
@@ -202,10 +202,29 @@ marz19_pca <- rasterPCA(fg2a_marz19)
 #marz19_pc1 <- marz19_pca$map$PC1
 plot(marz19_pca$map)
 
+
+
+plot(feb20_pca) <- (feb20_pca$map)
+plot(marz11_pca) <- (marz11_pca$map)
+plot(marz19_pca) <- (marz19_pca$map)
+
+
+plot(feb20_pca) 
+plot(marz11_pca) 
+plot(marz19_pca)
+
+#NON VA
+#par(mfrow=c(4,1))
+#plot(feb20_pca$map)
+#plot(marz11_pca$map)
+#plot(marz19_pca$map)
+#NON VA
+#grid.arrange(feb20_pca, marz11_pca, marz19_pca, nrow=12)
+
 #FOCAL MOVING WINDOW
 marz19_pc1 <- marz19_pca$map$PC1
 marz19_mw <- focal (marz19_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
-clsd <- colorRampPalette(c('blue','red','pink','orange','green','yellow'))(100)
+clsd <- colorRampPalette(c('blue','green','pink','red','orange','yellow'))(100)
 plot(marz19_mw, col=clsd)
 
 
