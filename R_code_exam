@@ -412,11 +412,12 @@ ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="
 # la nostra cover è l'etichetta e i valori all'interno che sono sempre vettori 
 # con cover construiamo una colonna ovvero torbidità 
 ESEMPIO
-ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="identity", fill="white")
+
 cover <- "torbidità"
-percent20<-0.1519401
+percent20 <-0.1519401
 percent11 <- 0.6055768
-percent19<-0.38140075
+percent19 <-0.38140075
 percentages<-data.frame(cover,percent20,percent11,percent19)
-plot(percentages)
+percentages
+ggplot(percentages, aes(x=cover, y=percent11, color=cover)) + geom_bar(stat="identity", fill="white")
 
