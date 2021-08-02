@@ -122,11 +122,11 @@ plot(p1_cropped)
 plot(p2_cropped)
 plot(p3_cropped)
 
-#  unsuperclass n=3 classi
+#  unsuperclass n=4 classi
 set.seed(25)
-p1_unclass <- unsuperClass(fg2a_feb20, nClasses=5)
-p2_unclass <- unsuperClass(fg2a_marz11, nClasses=5)
-p3_unclass <- unsuperClass(fg2a_marz19, nClasses=5)
+p1_unclass <- unsuperClass(fg2a_feb20, nClasses=4)
+p2_unclass <- unsuperClass(fg2a_marz11, nClasses=4)
+p3_unclass <- unsuperClass(fg2a_marz19, nClasses=4)
 
 #plotta con par
 
@@ -323,4 +323,100 @@ summary(marz19crop_pca$model)
 
 
 
+
+
+
+#p1_unclass <- unsuperClass(fg2a_feb20, nClasses=4)
+#p2_unclass <- unsuperClass(fg2a_marz11, nClasses=4)
+#p3_unclass <- unsuperClass(fg2a_marz19, nClasses=4)
+# IN QUESTO CASO LE DIMENSIONI delle immagini sono tutte diverse, utilizziamo la immagine più piccola per utilizzarla come cropper per le altre immagini 
+# il secondo argomento è lo stampo (cioè le altre due immagini)
+# questo perchè abbiamo bisogno di immagini con =estensione!! croppo con marzo 19 
+
+# faccio il crop per avere tutte le dimensioni uguale per tutte le immagine (ovvero n pixel asse x per asse y) per confrontare le immagini in modo congruo e non avere errori 
+# derivati dal numero di pixel diverso
+crop20 <- crop(fg2a_feb20,fg2a_marz19)
+crop11 <- crop(fg2a_marz11,fg2a_marz19)
+crop19 <- fg2a_marz19
+
+unclass19 <- unsuperClass(crop19, nClasses=4)
+unclass11 <- unsuperClass(crop11, nClasses=4)
+unclass20 <- unsuperClass(crop20, nClasses=4)
+
+par(mfrow=c(1,3))
+plot(unclass19$map)
+plot(unclass11$map)
+plot(unclass20$map)
+
+
+# value = classi count = n pixel 
+> freq(unclass19$map)
+     value  count
+[1,]     1  41532
+[2,]     2 101834
+[3,]     3 107774
+[4,]     4  15860
+> freq(unclass20$map)
+     value count
+[1,]     1 42530
+[2,]     2 40568
+[3,]     3 95501
+[4,]     4 88401
+> freq(unclass11$map)
+     value  count
+[1,]     1  29047
+[2,]     2  40036
+[3,]     3  36228
+[4,]     4 161689
+
+# se divido freq per il numero totale di pixel me lo trova per tutte le classi in automatico 
+posso fare o una divisione oppure associamo il numero totale di pixel ad un oggetto 
+
+# associo il n tot di pixel ad un oggetto 
+tot_pix <- 267000
+# dimensions : 712, 375, 267000, 3  (nrow, ncol, ncell, nlayers)
+
+# faccio la divisione 
+freq(unclass20$map)/tot_pix
+> freq(unclass20$map)/tot_pix
+            value     count
+[1,] 3.745318e-06 0.1592884
+[2,] 7.490637e-06 0.1519401
+[3,] 1.123596e-05 0.3576816
+[4,] 1.498127e-05 0.3310899
+
+> freq(unclass19$map)/tot_pix
+            value      count
+[1,] 3.745318e-06 0.15555056
+[2,] 7.490637e-06 0.38140075
+[3,] 1.123596e-05 0.40364794
+[4,] 1.498127e-05 0.05940075
+
+> freq(unclass11$map)/tot_pix
+            value     count
+[1,] 3.745318e-06 0.1087903
+[2,] 7.490637e-06 0.1499476
+[3,] 1.123596e-05 0.1356854
+[4,] 1.498127e-05 0.6055768
+
+# LA CLASSE 2 DI 20FEB (60%) è LA CLASSE 4 DI MARZ11(38) questà è la torbidità 
+# non abbiamo croppato l'immagine perchè avevamo bisogno di identificare rotte anche vicino al porto e alle rive 
+
+
+# DATA FRAME è una tabella che utilizziamo con percentage per 
+# us.dataframe per convertire in dataframe in oggetto
+    
+ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="identity", fill="white")
+ 
+# argomento : cover (etichette della tabella che creiamo con vettore, lo crei con c= cioè un vettore)
+# la nostra cover è l'etichetta e i valori all'interno che sono sempre vettori 
+# con cover construiamo una colonna ovvero torbidità 
+ESEMPIO
+ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="identity", fill="white")
+cover <- "torbidità"
+percent20<-0.1519401
+percent11 <- 0.6055768
+percent19<-0.38140075
+percentages<-data.frame(cover,percent20,percent11,percent19)
+plot(percentages)
 
