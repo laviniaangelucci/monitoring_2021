@@ -121,12 +121,14 @@ plot(p2_cropped)
 plot(p3_cropped)
 
 #  unsuperclass n=3 classi
-
-p1_unclass <- unsuperClass(fg2a_feb20, nClasses=3)
-p2_unclass <- unsuperClass(fg2a_marz11, nClasses=3)
-p3_unclass <- unsuperClass(fg2a_marz19, nClasses=3)
+set.seed(25)
+p1_unclass <- unsuperClass(fg2a_feb20, nClasses=5)
+p2_unclass <- unsuperClass(fg2a_marz11, nClasses=5)
+p3_unclass <- unsuperClass(fg2a_marz19, nClasses=5)
 
 #plotta con par
+
+set.seed(25)
  par(mfrow=c(1,3))
 plot(p1_unclass$map)
 plot(p2_unclass$map)
@@ -275,8 +277,6 @@ summary(marz11_pca$model)
 #Proportion of Variance  0.9378482  0.05840426 0.003747493
 #Cumulative Proportion   0.9378482  0.99625251 1.000000000
 
-
-# FORSE 20 FEBBRAIO C'è PIU' VARIABILITA' dovrei croppare le immagini perchè altrimenti c'è troppo rumore
 
 
 
