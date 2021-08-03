@@ -409,9 +409,12 @@ cover19 <- "torbidità 19marzo"
 
 percent20 <- 0.1519401
 percent11 <- 0.6055768
-percent19 <- 0.38140075
+percent19 <- 0.05940075
 
 percentages<- data.frame(cover=c(cover20,cover11,cover19), percentage=c(percent20,percent11,percent19))
 head(percentages)
 ggplot(percentages, aes(x=cover, y=percentage, color=cover)) + geom_bar(stat="identity", fill="white")
+
+# 11 marzo è molto "torbida" perchè c'era vento, è evidente però la differenza tra febbraio e marzo 11
+
 
