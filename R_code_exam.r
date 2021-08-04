@@ -316,9 +316,9 @@ freq(unclass20$map)/tot_pix
 # con cover construiamo una colonna ovvero torbidità 
 ESEMPIO
 
-cover20 <- "eterogeneità 20febbraio"
-cover11 <- "eterogeneità 11marzo"
-cover19 <- "eterogeneità 19marzo"
+cover20 <- "torbidità 20febbraio"
+cover11 <- "torbidità 11marzo"
+cover19 <- "torbidità 19marzo"
 
 percent20 <- 0.1519401
 percent11 <- 0.6055768
@@ -336,6 +336,9 @@ ggplot(percentages, aes(x=cover, y=percentage, color=cover)) + geom_bar(stat="id
 # PARTE DUE----------------------------------------------------------------------------------
 
 #PCA
+aprile2020 <- brick ("aprile2020_wgs84.tif")
+aprile2019 <- brick ("aprile2019_wgs84.tif")
+                 
 set.seed(25)
 apr20_pca <- rasterPCA(apr19)
 marz11_pca <- rasterPCA(apr20)
@@ -351,9 +354,6 @@ plot(apr19_mw, col=clsd)
 
 
 # UNSUPERCLASS
-aprile2020 <- brick ("aprile2020_wgs84.tif")
-aprile2019 <- brick ("aprile2019_wgs84.tif")
-
 apr19 <- crop(aprile2019,aprile2020)
 apr20 <- aprile2020
 
@@ -406,3 +406,29 @@ percentage2019 <- 27343746
 percentages <- data.frame(cover=c(cover20apr,cover19apr), percentage=c(percentage2020,percentage2019))
 head(percentages)
 ggplot(percentages, aes(x=cover, y=percentage, color=cover)) + geom_bar(stat="identity", fill="white")
+
+                 
+                 
+CROP DI TUTTE LE IMMAGINI CON LA PIù PICCOLA
+                
+feb20_cr <- crop(fg2a_feb20,aprile2020)                 
+marz11_cr <- crop(fg2a_marz11,aprile2020)
+marz19_cr <- crop(fg2a_marz19,aprile2020)
+apr19_cr <- crop(aprile2019,aprile2020)
+apr20_cr <- aprile2020
+                                  
+                 
+                 
+                 
+                 
+                                 
+percentages <- c(27343746, 0.1519401, 26562476, 0.6055768, 0.05940075)
+
+tempo <- c("aprile2019", "febbraio2020", "aprile2020", "marzo2020", "marzo2020")
+percentage <- data.frame(tempo,percentages)
+plot(percentage$percentages, type="b", lty="dashed", col="red", axes=FALSE, ann=FALSE)
+lines(percentage$percentages, type="l", col="blue")
+title(main="eterogeneità", col.main="blue", font.main="4", xlab="tempo", ylab="percentages")
+box()
+axis(1, at=1:5, lab=percentage$tempo)
+axis(2, las=1, at=seq(min(percentage), max(percetage), 300))
