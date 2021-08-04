@@ -316,9 +316,9 @@ freq(unclass20$map)/tot_pix
 # con cover construiamo una colonna ovvero torbidità 
 ESEMPIO
 
-cover20 <- "torbidità 20febbraio"
-cover11 <- "torbidità 11marzo"
-cover19 <- "torbidità 19marzo"
+cover20 <- "eterogeneità 20febbraio"
+cover11 <- "eterogeneità 11marzo"
+cover19 <- "eterogeneità 19marzo"
 
 percent20 <- 0.1519401
 percent11 <- 0.6055768
