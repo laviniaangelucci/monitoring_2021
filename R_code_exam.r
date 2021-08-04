@@ -30,99 +30,6 @@ INVESTIGHIAMO UN OGGETTO PRIMA DI INIZIARE UN PROGETTO
 #plotrgb
 #plotRGB(laguna_13a_02g)
 #----------------------------------------------------------------------------------------
-
-
-
-#settiamo la working directory sia la library raster che rgdal
-
-library(raster)
-setwd("C:/pt/")
-library(rgdal)
-library(gridExtra)
-library(RStoolbox)
-library(ggplot2)
-
-
-# PROVO CON IMMAGINE GEOREFERENZIATA SU QGIS 
-
-# chiamo lo shapefile precedentemente georeferenziato su gis (questo è lo shape file poligono del crop solo su acqua) 
-# verrà applicato su immagini fg2a fg2b fg2c ovvero 20 febbraio, 11 marzo, 19 marzo 2020
-readOGR("files lavinia angelucci.shp")
-
-# rinomino lo shape file (questo è solo il poligono)
-lagoon_shp <- readOGR ("files lavinia angelucci.shp")
-
-#plotto il poligono, ossiamo il crop della laguna **guarda riga 46**
-# plot(lagoon_shp)
-
-# importo l'immagine del 11 marzo fg2b georeferenziata su qgis con sistema di riferimento wags84 coordinate 4326
-# fg2b_mar11<- brick("fig2b_wgs84.tif")
-
-# controllo le proprietà dell'immagine, ORA è GEOREFERENZIATA!!!!
-fg2b_mar11
-#class      : RasterBrick 
-#Dimensions : 712, 388, 276256, 3  (nrow, ncol, ncell, nlayers)
-#resolution : 1, 1  (x, y)
-#extent     : 0, 388, -712, 0  (xmin, xmax, ymin, ymax)
-#crs        : +proj=longlat +datum=WGS84 +no_defs 
-#source     : C:/pt/fig2b_wgs84.tif 
-#names      : fig2b_wgs84.1, fig2b_wgs84.2, fig2b_wgs84.3 
-#min values :             0,             0,             0 
-#max values :           255,           255,           255 
-
-# faccio la stessa cosa con fig2a 20febbraio, 11marzo e 19marzo
-fg2a_feb20<- brick("fig2a_wgs84.tif")
-fg2a_marz11<- brick("fig2b_wgs84.tif")
-fg2a_marz19<- brick("fig2c_wgs84.tif")
-
-# ho georeferenziato tutte le immagini fg2a fg2b fg2c
-# plot(nome dell'immagine,add=TRUE) plotta cose una sopra l'altra 
-
-# plotto le immagini con RGB 
-plotRGB(fg2a_feb20, r=3, g=2, b=1, stretch="hist")
-plotRGB(fg2a_marz11, r=3, g=2, b=1, stretch="hist")
-plotRGB(fg2a_marz19, r=3, g=2, b=1, stretch="hist")
-
-#carico le library 
-#library(RStoolbox)
-#library(ggplot2)
-#library(gridExtra)
-
-# plotto con ggRGB
-ggRGB(fg2a_feb20,1,2,3, stretch="hist")
-ggRGB(fg2a_marz11,1,2,3, stretch="hist")
-ggRGB(fg2a_marz19,1,3,2, stretch="hist")
-
-# usiamo la funzione grid arrange per plottare inseme e poi provo con PAR
-p1 <- ggRGB(fg2a_feb20,1,2,3, stretch="hist")
-p2 <-  ggRGB(fg2a_marz11,1,2,3, stretch="hist")
-p3 <-  ggRGB(fg2a_marz19,1,2,3, stretch="hist")
-
-#faccio grid.arrange
-grid.arrange(p1, p2, p3, nrow=1)
-
-#lagoon_shp <- readOGR ("files lavinia angelucci.shp")
-
-#così NON FUNZIONAA
-# p1_cropped <- ggRGB(fg2a_feb20,1,2,3, stretch="hist")
-#p2_cropped <-  ggRGB(fg2a_marz11,1,2,3, stretch="hist")
-#p3_cropped <-  ggRGB(fg2a_marz19,1,2,3, stretch="hist")
- 
-# crop(p1_cropped, lagoon_shp)
-# fai finta sia un'immagine normale con 3 bande ma croppata DEVI TRATTARLA COME IMMAGINE INTERA NON LA RINOMINARE --> (crop(fg2a_feb20,lagoon_shp))
-# plot(crop(fg2a_feb20,lagoon_shp)) FUNZIONA
-
-# rinomino le immagini croppate
-p1_cropped <- ggRGB(crop(fg2a_feb20,lagoon_shp),1,2,3, stretch="hist")
-p2_cropped <- ggRGB(crop(fg2a_marz11,lagoon_shp),1,2,3, stretch="hist")
-p3_cropped <- ggRGB(crop(fg2a_marz19,lagoon_shp),1,2,3, stretch="hist")
-
-# plotto le immagini croppate con grid-arrange
-grid.arrange(p1_cropped, p2_cropped, p3_cropped, nrow=3)
-
-#PCA, analisi multivariata
-#you take a dataset with many variables, and you simplify that dataset by turning your original variables into a smaller number of "Principal Components".
-
 #installa pacchetto
 install.packages("viridis")
 library (viridis)
@@ -133,77 +40,119 @@ library(gridExtra)
 library(RStoolbox)
 library(ggplot2)
 
-
+# CARICO PACCHETTI IMMAGINI 
 fg2a_feb20<- brick("fig2a_wgs84.tif")
-fg2a_marz19<- brick("fig2c_wgs84.tif")
 fg2a_marz11<- brick("fig2b_wgs84.tif")
+fg2a_marz19<- brick("fig2c_wgs84.tif")
 
-#MARZO 11  PCA 
-marz11_pca <- rasterPCA(fg2a_marz11)
-#marz11_pca <- fg2a_marz11$map$PC1
-plot(marz11_pca$map)
-#FOCAL MOVING WINDOW
-marz11_pc1 <- marz11_pca$map$PC1
-marz11_mw <- focal (marz11_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
-clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100)
-plot(marz11_mw, col=clsd)
+readOGR("files lavinia angelucci.shp")
+lagoon_shp <- readOGR ("files lavinia angelucci.shp")
 
 
+# plotto le immagini con RGB 
+plotRGB(fg2a_feb20, r=3, g=2, b=1, stretch="hist")
+plotRGB(fg2a_marz11, r=3, g=2, b=1, stretch="hist")
+plotRGB(fg2a_marz19, r=3, g=2, b=1, stretch="hist")
 
-# FEBBRAIO 20 PCA
+# plotto con ggRGB
+ggRGB(fg2a_feb20,1,2,3, stretch="hist")
+ggRGB(fg2a_marz11,1,2,3, stretch="hist")
+ggRGB(fg2a_marz19,1,3,2, stretch="hist")
+p1 <- ggRGB(fg2a_feb20,1,2,3, stretch="hist")
+p2 <-  ggRGB(fg2a_marz11,1,2,3, stretch="hist")
+p3 <-  ggRGB(fg2a_marz19,1,2,3, stretch="hist")
+
+#faccio grid.arrange
+grid.arrange(p1, p2, p3, nrow=1)
+
+# rinomino le immagini croppate
+p1_cropped <- ggRGB(crop(fg2a_feb20,lagoon_shp),1,2,3, stretch="hist")
+p2_cropped <- ggRGB(crop(fg2a_marz11,lagoon_shp),1,2,3, stretch="hist")
+p3_cropped <- ggRGB(crop(fg2a_marz19,lagoon_shp),1,2,3, stretch="hist")
+
+# plotto le immagini croppate con grid.arrange
+grid.arrange(p1_cropped, p2_cropped, p3_cropped, nrow=3)
+
+
+
+#PCA, analisi multivariata
+#you take a dataset with many variables, and you simplify that dataset by turning your original variables into a smaller number of "Principal Components".
+set.seed(25)
 feb20_pca <- rasterPCA(fg2a_feb20)
-#feb20_pca <- fg2a_feb20$map$PC1
-plot(feb20_pca$map)
-#FOCAL MOVING WINDOW
-feb20_pc1 <- feb20_pca$map$PC1
-feb20_mw <- focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
-clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100)
-plot(feb20_mw, col=clsd)
-
-
-# MARZO 19
+marz11_pca <- rasterPCA(fg2a_marz11)
 marz19_pca <- rasterPCA(fg2a_marz19)
-#marz19_pc1 <- marz19_pca$map$PC1
-plot(marz19_pca$map)
-#FOCAL MOVING WINDOW
+
+#par(mfrow=c(1,3))
+#plot(feb20_pca$map)
+#plot(marz11_pca$map)
+#plot(marz19_pca$map)
+
+
+ggRGB(feb20_pca$map,1,2,3, stretch="lin", q=0)
+ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0)
+ggRGB(marz11_pca$map,1,2,3, stretch="lin", q=0)
+
+plot20 <- lapply(1:3, function(x) ggRGB(feb20_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE))
+plot11 <- lapply(1:3, function(x) ggRGB(marz11_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE))
+plot19 <- lapply(1:3, function(x) ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE))
+
+ grid.arrange(plot20[[1]],plot20[[2]], plot20[[3]], ncol=2)
+ grid.arrange(plot11[[1]],plot11[[2]], plot11[[3]], ncol=2)
+ grid.arrange(plot19[[1]],plot19[[2]], plot19[[3]], ncol=2)
+ 
+ #grid.arrange delle 3 immagini 
+ grid.arrange(plot20[[1]],plot11[[1]], plot19[[1]], ncol=2)
+ 
+# crop delle immagini PCA
+crop(feb20_pca$map,lagoon_shp)
+crop(marz11_pca$map,lagoon_shp)
+crop(marz11_pca$map,lagoon_shp)
+
+feb20crop <- crop(feb20_pca$map,lagoon_shp)
+marz11crop <- crop(marz11_pca$map,lagoon_shp)
+marz19crop <- crop(marz19_pca$map,lagoon_shp)
+
+feb20crop_pca <- rasterPCA(feb20crop)
+marz11crop_pca <- rasterPCA(marz11crop)
+marz19crop_pca <- rasterPCA(marz19crop)
+par(mfrow=c(1,3))
+plot(feb20crop_pca$map)
+plot(marz11crop_pca$map)
+plot(marz19crop_pca$map)
+
+
+
+
+
+
+# MOVING WINDOW
+
+feb20_pc1 <- feb20_pca$map$PC1
+marz11_pc1 <- marz11_pca$map$PC1
 marz19_pc1 <- marz19_pca$map$PC1
+par(mfrow=c(1,3))
+plot(feb20_pc1)
+plot(marz11_pc1)
+plot(marz19_pc1)
+
+feb20_mw <- focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+marz11_mw <- focal (marz11_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 marz19_mw <- focal (marz19_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 clsd <- colorRampPalette(c('blue','green','pink','red','orange','yellow'))(100)
-plot(marz19_mw, col=clsd)
-
-plot(feb20_pca) <- (feb20_pca$map)
-plot(marz11_pca) <- (marz11_pca$map)
-plot(marz19_pca) <- (marz19_pca$map)
-plot(feb20_pca) 
-plot(marz11_pca) 
-plot(marz19_pca)
-
-# faccio un PAR SENZA cropped clramp MOVING WINDOW
 par(mfrow=c(1,3))
 plot(feb20_mw, col=clsd)
 plot(marz11_mw, col=clsd)
 plot(marz19_mw, col=clsd)
 
-
-#PLOT CROPPATO FEB20 MARZ11 MARZ19 MOVING WINDOW
-lagoon_shp <- readOGR ("files lavinia angelucci.shp")
-clsd <- colorRampPalette(c('blue','green','pink','red','orange','yellow'))(100)
-
 feb20mw_cropped <- crop(feb20_mw,lagoon_shp)
-plot(feb20mw_cropped, col=clsd)
+marz11mw_cropped <- crop(marz11_mw,lagoon_shp)
+marz19mw_cropped <- crop(marz19_mw,lagoon_shp)
 
-marz11mw_cropped <- (crop(marz11_mw,lagoon_shp))
-plot(marz11mw_cropped, col=clsd)
-
-marz19mw_cropped <- (crop(marz19_mw,lagoon_shp))
-plot(marz19mw_cropped, col=clsd)
-
-
-#PAR cropped clramp MOVING WINDOW
 par(mfrow=c(1,3))
 plot(feb20mw_cropped, col=clsd)
 plot(marz11mw_cropped, col=clsd)
 plot(marz19mw_cropped, col=clsd)
+
 
 
 #SUMMARY DELLE COMPONENTI NON CROPPED
@@ -229,38 +178,25 @@ summary(marz11_pca$model)
 
 
 # SUMMARY DELLE COMPONENTI CROPPATO --> VALORI SOLO DI ACQUA
-
-# FEBBRAIO 20
-crop(feb20_pca$map,lagoon_shp)
-#plot(crop(feb20_pca$map,lagoon_shp))
-feb20crop <- crop(feb20_pca$map,lagoon_shp)
-feb20crop_pca <- rasterPCA(feb20crop)
-
-summary(feb20crop_pca$model)
+#summary(feb20crop_pca$model)
 #                            Comp.1      Comp.2      Comp.3
 #Standard deviation     104.6909160 27.94909281 7.469126723
 #Proportion of Variance   0.9290556  0.06621542 0.004728935
 #Cumulative Proportion    0.9290556  0.99527106 1.000000000
 
 # MARZO 19
-crop(marz19_pca$map,lagoon_shp)
-#plot(crop(marz19_pca$map,lagoon_shp))
-marz19crop <- crop(marz19_pca$map,lagoon_shp)
-marz19crop_pca <- rasterPCA(marz19crop)
 
-summary(marz19crop_pca$model)
+
+#summary(marz19crop_pca$model)
 #                           Comp.1      Comp.2      Comp.3
 #Standard deviation     64.2115564 18.79066226 6.541294697
 #Proportion of Variance  0.9123971  0.07813429 0.009468582
 #Cumulative Proportion   0.9123971  0.99053142 1.000000000
 
 #MARZO 11
-crop(marz11_pca$map,lagoon_shp)
-#plot(crop(marz11_pca$map,lagoon_shp))
-marz11crop <- crop(marz11_pca$map,lagoon_shp)
-marz11crop_pca <- rasterPCA(marz11crop)
 
-summary(marz19crop_pca$model)
+
+#summary(marz19crop_pca$model)
 #                          Comp.1      Comp.2      Comp.3
 #Standard deviation     64.2115564 18.79066226 6.541294697
 #Proportion of Variance  0.9123971  0.07813429 0.009468582
@@ -270,7 +206,7 @@ summary(marz19crop_pca$model)
 
 
 
-#RIPRENDIAMO CON UNSUPERCLASS
+# UNSUPERCLASS
 #  unsuperclass n=4 classi
 set.seed(25)
 p1_unclass <- unsuperClass(fg2a_feb20, nClasses=4)
@@ -278,7 +214,6 @@ p2_unclass <- unsuperClass(fg2a_marz11, nClasses=4)
 p3_unclass <- unsuperClass(fg2a_marz19, nClasses=4)
 
 #plotta con par
-
 set.seed(25)
  par(mfrow=c(1,3))
 plot(p1_unclass$map)
@@ -286,15 +221,15 @@ plot(p2_unclass$map)
 plot(p3_unclass$map)
 
 # IMMAGINI UNSUPER CLASS CROPPATE
-plot(crop(p1_unclass$map,lagoon_shp))
-plot(crop(p2_unclass$map,lagoon_shp))
-plot(crop(p3_unclass$map,lagoon_shp))
+#plot(crop(p1_unclass$map,lagoon_shp))
+#plot(crop(p2_unclass$map,lagoon_shp))
+#plot(crop(p3_unclass$map,lagoon_shp))
 
-# funzione PAR metto tutte le immagini insieme
-par(mfrow=c(1,3))
-plot(crop(p1_unclass$map,lagoon_shp))
-plot(crop(p2_unclass$map,lagoon_shp))
-plot(crop(p3_unclass$map,lagoon_shp))
+# funzione PAR 
+#par(mfrow=c(1,3))
+#plot(crop(p1_unclass$map,lagoon_shp))
+#plot(crop(p2_unclass$map,lagoon_shp))
+#plot(crop(p3_unclass$map,lagoon_shp))
 
 
 # IN QUESTO CASO LE DIMENSIONI delle immagini sono tutte diverse, utilizziamo la immagine più piccola per utilizzarla come cropper per le altre immagini 
@@ -303,6 +238,7 @@ plot(crop(p3_unclass$map,lagoon_shp))
 
 # faccio il crop per avere tutte le dimensioni uguale per tutte le immagine (ovvero n pixel asse x per asse y) per confrontare le immagini in modo congruo e non avere errori 
 # derivati dal numero di pixel diverso
+
 crop20 <- crop(fg2a_feb20,fg2a_marz19)
 crop11 <- crop(fg2a_marz11,fg2a_marz19)
 crop19 <- fg2a_marz19
@@ -397,4 +333,76 @@ ggplot(percentages, aes(x=cover, y=percentage, color=cover)) + geom_bar(stat="id
 
  
 
+# PARTE DUE----------------------------------------------------------------------------------
 
+#PCA
+set.seed(25)
+apr20_pca <- rasterPCA(apr19)
+marz11_pca <- rasterPCA(apr20)
+apr20_pc1 <- feb20_pca$map$PC1
+apr19_pc1 <- marz11_pca$map$PC1
+apr20_mw <- focal (apr20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+apr19_mw <- focal (apr19_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+clsd <- colorRampPalette(c('blue','yellow','pink','red','orange','green'))(100)
+par(mfrow=c(1,2))
+plot(apr20_mw, col=clsd)
+plot(apr19_mw, col=clsd)
+
+
+
+# UNSUPERCLASS
+aprile2020 <- brick ("aprile2020_wgs84.tif")
+aprile2019 <- brick ("aprile2019_wgs84.tif")
+
+apr19 <- crop(aprile2019,aprile2020)
+apr20 <- aprile2020
+
+apri19_unclass <- unsuperClass(apr19, nClasses=4)
+apri20_unclass <- unsuperClass(apr20, nClasses=4)
+
+par(mfrow=c(1,2))
+plot(apri20_unclass$map)
+plot(apri19_unclass$map)
+
+freq(apri20_unclass$map)
+freq(apri19_unclass$map)
+
+freq(apri19_unclass$map)
+     value  count
+[1,]     1 805518  # bianco, mi sembra uguale
+[2,]     2 432379 # 4 classe del 20 aprile 
+[3,]     3  85515
+[4,]     4 257860 
+freq(apri20_unclass$map)
+     value  count
+[1,]     1 790328 
+[2,]     2 270363 
+[3,]     3 100556
+[4,]     4 420025 # 2 classe del 19 aprile
+
+tot_pix_apr <- 1581272
+freq(apri20_unclass$map)/tot_pix_apr
+freq(apri19_unclass$map)/tot_pix_apr
+
+freq(apri19_unclass$map)/tot_pix_apr
+            value      count
+[1,] 6.324023e-07 0.50941141
+[2,] 1.264805e-06 0.27343746
+[3,] 1.897207e-06 0.05407988
+[4,] 2.529609e-06 0.16307125
+
+ freq(apri20_unclass$map)/tot_pix_apr
+            value      count
+[1,] 6.324023e-07 0.49980522
+[2,] 1.264805e-06 0.17097817
+[3,] 1.897207e-06 0.06359184
+[4,] 2.529609e-06 0.26562476
+
+cover20apr <- "eterogeneità aprile2020"
+cover19apr <- "eterogeneità aprile2019"
+percentage2020 <- 26562476
+percentage2019 <- 27343746
+
+percentages <- data.frame(cover=c(cover20apr,cover19apr), percentage=c(percentage2020,percentage2019))
+head(percentages)
+ggplot(percentages, aes(x=cover, y=percentage, color=cover)) + geom_bar(stat="identity", fill="white")
