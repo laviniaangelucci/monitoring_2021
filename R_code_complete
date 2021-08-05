@@ -1,17 +1,17 @@
 # R_code_complete_telerilevamento geoecologico 2020/2021
 
 # SUMMARY 
-# 1. remote sensing summary first code
-# 2. R code time series second code
-# 3. R code dopernicus third code
-# 4. R code knit R fourth code
-# 5. R code multivariat analysis fifth code (MISSING)
-# 6. R code classification sixth code
-# 7. R code ggplot2 seventh code 
-# 8. R code vegetation index eighth code (DAY 1 IS MISSING)
-# 9. R code land cover ninth code
-# 10. R code variability tenth code
-
+# 1. remote sensing summary 
+# 2. R code time series 
+# 3. R code copernicus 
+# 4. R code knit R 
+# 5. R code multivariat analysis  (MISSING)
+# 6. R code classification 
+# 7. R code ggplot2 
+# 8. R code vegetation index  (DAY 1 IS MISSING)
+# 9. R code land cover 
+# 10. R code variability 
+# 11 R code spectral signatures
 #------------------------------------------------------
 
 # R_code_remote_sensing
@@ -483,12 +483,12 @@ plot(gcc4$map)
 
 # R_code_ggplot2 
 # 7. R code ggplot 2 seventh code
-
 library(raster)
 library(RStoolbox)
 library(ggplot2)
 library(gridExtra)
 setwd("~/lab/")
+
 #usiamo la funzione brick *guarda prima*
 p224r63 <- brick("p224r63_2011_masked.grd")
 
@@ -500,7 +500,7 @@ ggRGB(p224r63,4,3,2, stretch="lin")
 p1 <- ggRGB(p224r63,3,2,1, stretch="lin")
 p2 <- ggRGB(p224r63,4,3,2, stretch="lin")
 
-# utilizzo le immagini p1 e p2 con funzione grid.arrange mrow2 per visualizzarle 
+# utilizzo le immagini p1 e p2 con funzione grid.arrange mrow2 per visualizzarle # library(gridExtra)
 grid.arrange(p1, p2, nrow = 2)
 
 #--------------------------------
@@ -508,17 +508,15 @@ grid.arrange(p1, p2, nrow = 2)
 # R_code_vegetetion_index
 # 8. R code vegetation index eighth code
 
-# DAY 1 missing 
-
-# DAY 2 
-
-# carichiamo i pacchetti raster di nostro interesse
-library(raster)
-# for vegetation indices calculation
-library(RStoolbox) 
-
 # set della workingdirectory 
 setwd("C:/lab/") 
+# carichiamo i pacchetti raster di nostro interesse
+library(raster)
+library(RStoolbox)  # peer calcolare indice di vegetazione
+install.packages("rasterdiv")
+library(rasterdiv) # per fare NDVI 
+# install.packages("rasterVis")
+library(rasterVis)
 
 # lavoriamo con immagini della foresta amazonica di NASA portiamo all'interno di R le immagini con funzione "brick"
 defor1 <- brick("defor1.jpg")
@@ -531,7 +529,12 @@ plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
 
 # b1 = NIR  b2 = RED  b3 = GREEN
  
- # usiamo la "different vegetation index" dell'immagine 1 div1 per ottenere un immagine e visualizzare differenza dell'infrarosso e il rosso 
+# usiamo la "different vegetation index" dell'immagine 1 div1 per ottenere un immagine e visualizzare differenza dell'infrarosso e il rosso 
+# NDVI è un indice "quantitativo", da informazioni circa il range di "greenness" ranging da 0-1
+# NDVI= 1 -> massimo grado di "greennes" 
+#NDVI =0 -> minimo grado di "greennes"
+# NDVI è spesso usata per avere informazioni quantitative circa lo stato della vegetazione su larghe scale
+
  dvi1 <- defor1$defor1.1 - defor1$defor1.2
 
 # plottiamo l'immagine dvi1 con la funzione "plot" 
@@ -572,10 +575,10 @@ plot(ndvi1, col=cl)
 ndvi2 <- (defor2$defor2.1 - defor2$defor2.2) / (defor2$defor2.1 + defor2$defor2.2)
 plot(ndvi2, col=cl)
 
-# carichiamo il pacchetto RStoolbox
-library(RStoolbox) 
+# library(RStoolbox)  # acchetto RStoolbox necessario
 
 # usiamo la funzione "spectral indices" con "vi1" e plottiamo con la colorramppalette "col"
+# permette di calcolare tutti gli indici insieme invece che uno alla volta
 vi <- spectralIndices(defor1, green = 3, red = 2, nir = 1)
 plot(vi, col=cl)
 
@@ -590,9 +593,7 @@ plot(difndvi, col=cld)
 
 
 # DAY 3 
-
-# installiamo il pacchetto di files "rasterdiv" per la visualizzazione di worllwide NDVI  
-install.packages("rasterdiv")
+install.packages("rasterdiv") # pacchetto di files "rasterdiv" per la visualizzazione di worllwide NDVI  
 library(rasterdiv)
 
 # plottiamo il set NDVI (Normalized Difference Vegetation Index)
@@ -614,6 +615,7 @@ levelplot(copNDVI)
  # 9. R code land cover ninth code 
 
 # R_code_land_cover.r
+
 library(raster)
 library(RStoolbox)
 library(ggplot2)
@@ -649,14 +651,67 @@ par(mfrow=c(1,2))
 plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
 plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
 
-# installiamo "GreenExtra" che permette di utilizzare ggplot per dati raster
-install.packages("gridExtra")
+
+install.packages("gridExtra") # "GreenExtra" che permette di utilizzare ggplot per dati raster
 library(gridExtra)
 
 # facciamo un multiframe per visualizzare defort1 e defort2 insieme attraverso la funzione "ggplot" e "grid.arrange" (mette insieme diverse sezioni all'interno del grafico in R)
 p1 <- ggRGB(defor1, r=1, g=2, b=3, stretch="lin")
 p2 <- ggRGB(defor2, r=1, g=2, b=3, stretch="lin")
 grid.arrange(p1, p2, nrow=2)
+
+
+# "unsupervised classification" **guarda cap 6**
+d1c <- unsuperClass(defor1, nClasses=2)
+plot(d1c$map)
+
+# classe 1: forest
+# classe 2: agriculture
+
+#con la funzione "set.seed" il  nostro codice riproduce lo stesso set di numeri casuali
+# tra () inseriamo come argomento un numero intero (arbitrario).
+# set.seed() 
+
+d2c <- unsuperClass(defor2, nClasses=2)
+plot(d2c$map)
+# classe 1: agriculture
+# classe 2: forest
+d2c3 <- unsuperClass(defor2, nClasses=3)
+plot(d2c3$map)
+
+# con la funzione "freq" esaminiamo la frequenza dell'immagine precedentemente studiata con "unsuperclass"
+# in questo modo assegnamo i valori numerici (grazie a funzione "freq") alle classi (in questo caso sono due [1] e [2])
+freq(d1c$map)
+#   value  count
+# [1,]     1 306583
+# [2,]     2  34709
+
+s1 <- 306583 + 34709
+prop1 <- freq(d1c$map) / s1
+# prop forest: 0.8983012
+# prop agriculture: 0.1016988
+
+s2 <- 342726
+prop2 <- freq(d2c$map) / s2
+# prop forest: 0.5206958
+# prop agriculture: 0.4793042
+
+# costruiamo attraverso la funzione "data.frame" i dati utili per poi plottare il grafico a barre ("geom_bar")
+cover <- c("Forest","Agriculture")
+percent_1992 <- c(89.83, 10.16)
+percent_2006 <- c(52.06, 47.93)
+
+percentages <- data.frame(cover, percent_1992, percent_2006)
+percentages
+
+# funzione per plottare con geometria a barre
+ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="identity", fill="white")
+ggplot(percentages, aes(x=cover, y=percent_2006, color=cover)) + geom_bar(stat="identity", fill="white")
+
+p1 <- ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="identity", fill="white")
+p2 <- ggplot(percentages, aes(x=cover, y=percent_2006, color=cover)) + geom_bar(stat="identity", fill="white")
+
+grid.arrange(p1, p2, nrow=1)
 
 #-------------------------------------------
 
@@ -731,18 +786,10 @@ summary(sentpca$model) # la prima componente spiega il 6736804 % della variabili
 # settiamo la working directory e le library
 library(raster)
 library(RStoolbox)
-
-# install.packages("RStoolbox")
-setwd("C:/lab/")
-
-# settiamo la library ggplot
-library(ggplot2)
-
-# libreria per plottare ggplot insieme 
-library(gridExtra)
-
-# installiamo la libreria per plottare colorato automaticamente 
-install.packages("viridis")
+setwd("C:/lab/") # install.packages("RStoolbox")
+library(ggplot2) # settiamo la library ggplot
+library(gridExtra) # libreria per plottare ggplot insieme 
+install.packages("viridis") # installiamo la libreria per plottare colorato automaticamente 
 library (viridis)
 
 # portiamo in R l'immagine "sentinel.png" attraverso la funzione brik
@@ -766,17 +813,17 @@ pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
 # utiliziamo una color ramppalette e plottiamo l'immagine 
 clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) 
 plot(pc1sd3, col=clsd)
-
-# prepariamo il codice salviamolo nel server e usiamo la funzione "source" per recuperare facilmente il file su R
 # pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
 # clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) # 
 # plot(pc1sd5, col=clsd)
-source("source_test_lezione.r")
 
+
+# prepariamo il codice salviamolo nel server e usiamo la funzione "source" per recuperare facilmente il file su R
 # prepariamo un altro codice e portiamolo in r con la funzione "source"
+source("source_test_lezione.r")
 source("source_ggplot.r")
 
-# attraverso questa funzione individuiamo bene la discontinuità urbana, a livello geologico le diversità geomorfologiche e a livello ecologico indiviuiamo gli ecotoni (passaggi da un ambiente all'altro es bosco, prateria)
+
 # aggiungiamo a ggplot() con + a una geometria (punti, linee, poligoni, pixel raster ecc..) in questo caso usiamo la funzione geom_raster con oggetto la mappa PCA
 # definiamo le "estetiche" (aes) ossia il layer che vogliamo mappare attraverso la funzione "mapping"
 # le aes avrà coordinate geografiche x y e riempimento: x= x y=y riempimento = layer)
@@ -796,8 +843,137 @@ ggtitle("Standard deviation of PC1 by magma colour scale")
 # inseriamo più grafici in una pagina attraverso funzione "grid.arrange" e la library "library(gridExtra)"
 grid.arrange(p1, p2, p3, nrow = 1)
 
- 
+#------------------------------------------------------------------------------------------------------------------ 
+# R_code_spectral_signatures
+# 11 R code spectral signatures eleventh code
 
+# carico le library
+library(raster)
+library(rgdal)
+library(ggplot2)
+# setto woking directory
+setwd("C:/lab/") # windows
+
+# carico immagine su R attraverso funzione "brick"
+defor2 <- brick("defor2.jpg")
+
+defor2
+# defor2.1, defor2.2, defor2.3 
+# NIR, red, green
+
+# plotto immagine con tretch lineare e hist, bande 1 2 3 NIR red green
+plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
+plotRGB(defor2, r=1, g=2, b=3, stretch="hist")
+
+# utilizzo la funzione "click" per identificare dei valori di un oggetto raster in un determinato punto
+click(defor2, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
+
+# risultati:
+#      x     y  cell defor2.1 defor2.2 defor2.3
+# 1 178.5 435.5 30293      206        6       19
+#      x     y   cell defor2.1 defor2.2 defor2.3
+# 1 571.5 245.5 166916       40       99      139
+
+# definiamo le colonne del dataset per costruire successivamente daframe e grafico con "geom line":
+band <- c(1,2,3)
+forest <- c(206,6,19)
+water <- c(40,99,139)
+
+# creiamo dataframe
+spectrals <- data.frame(band, forest, water)
+
+# plottiamo "sepctral signatures" con geometrie lineari per costruire il grafico
+ggplot(spectrals, aes(x=band)) + geom_line(aes(y=forest), color="green") + geom_line(aes(y=water), color="blue") +
+ labs(x="band",y="reflectance")
+
+############### Multitemporal
+# ANALISI MULTITEMPORALE
+
+########### T1
+#funzionne brick per importare immagine defor1 dentro R
+defor1 <- brick("defor1.jpg")
+
+#plot immagine con stretch lin bande 1 2 3 NIR red green
+plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
+
+# funzione click  per identificare dei valori di un oggetto raster in un determinato punto (in questo caso defor1) 
+# spectral signatures defor1
+click(defor1, id=T, xy=T, cell=T, type="p", pch=16, col="yellow")
+
+#     x     y  cell defor1.1 defor1.2 defor1.3
+# 1 89.5 339.5 98622      223       11       33
+#     x     y   cell defor1.1 defor1.2 defor1.3
+# 1 42.5 336.5 100717      218       16       38
+#     x     y  cell defor1.1 defor1.2 defor1.3
+# 1 64.5 341.5 97169      213       36       46
+#      x     y   cell defor1.1 defor1.2 defor1.3
+# 1 80.5 326.5 107895      208        2       22
+#     x     y  cell defor1.1 defor1.2 defor1.3
+# 1 76.5 374.5 73619      224       21       41
+
+
+################### T2
+# plot e funzione cick per defor2 
+plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
+#funzione click  per identificare dei valori di un oggetto raster in un determinato punto (in questo caso defor2) 
+click(defor2, id=T, xy=T, cell=T, type="p", pch=16, col="yellow")
+
+#      x     y  cell defor2.1 defor2.2 defor2.3
+# 1 86.5 339.5 99033      197      163      151
+#      x     y  cell defor2.1 defor2.2 defor2.3
+# 1 104.5 338.5 99768      149      157      133
+#      x     y  cell defor2.1 defor2.2 defor2.3
+# 1 110.5 354.5 88302      197      132      128
+#     x     y   cell defor2.1 defor2.2 defor2.3
+# 1 90.5 320.5 112660      169      166      149
+#    x     y   cell defor2.1 defor2.2 defor2.3
+# 1 97.5 309.5 120554      150      137      129
+
+# definisco le colonne del dataset dataset:
+band <- c(1,2,3)
+time1 <- c(223,11,33)
+time1p2 <- c(218,16,38)
+time2 <- c(197,163,151)
+time2p2 <- c(149,157,133)
+spectralst <- data.frame(band, time1, time2, time1p2, time2p2)
+
+
+# plottiamo  sepctral signatures attraverso geometria lineare
+ggplot(spectralst, aes(x=band)) + geom_line(aes(y=time1), color="red", linetype="dotted") + geom_line(aes(y=time1p2), color="red", linetype="dotted") +
+geom_line(aes(y=time2), linetype="dotted") + geom_line(aes(y=time2p2), linetype="dotted") +
+ labs(x="band",y="reflectance")
+
+
+# porto all'interno di R l'immagine di Earth Observatory con funzione brick
+
+eo <- brick("june_puzzler.jpg")
+plotRGB(eo, 1,2,3, stretch="hist")
+# funione click funzione click  per identificare dei valori di un oggetto raster in un determinato punto (in questo caso eo) 
+click(eo, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
+
+# output
+#     x     y  cell june_puzzler.1 june_puzzler.2 june_puzzler.3
+# 1 93.5 373.5 76414            187            163             11
+#      x     y   cell june_puzzler.1 june_puzzler.2 june_puzzler.3
+# 1 219.5 285.5 139900             11            140              0
+#     x     y   cell june_puzzler.1 june_puzzler.2 june_puzzler.3
+# 1 184.5 315.5 118265             41             40             20
+
+
+# definiamo le colonne del dataset:
+band <- c(1,2,3)
+stratum1 <- c(187,163,11)
+stratum2 <- c(11,140,0)
+stratum3 <- c(41,40,20)
+
+spectralsg <- data.frame(band, stratum1, stratum2, stratum3)
+
+# polliamo sepctral signatures con geometrie lineari
+ggplot(spectralsg, aes(x=band)) + geom_line(aes(y=stratum1), color="yellow") + geom_line(aes(y=stratum2), color="green") +
+ geom_line(aes(y=stratum3), color="blue") +
+ labs(x="band",y="reflectance")
+
+#------------------------------------------------
 
 
 
