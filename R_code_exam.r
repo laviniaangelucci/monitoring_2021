@@ -92,9 +92,13 @@ ggRGB(feb20_pca$map,1,2,3, stretch="lin", q=0)
 ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0)
 ggRGB(marz11_pca$map,1,2,3, stretch="lin", q=0)
 
-plot20 <- lapply(1:3, function(x) ggRGB(feb20_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE))
-plot11 <- lapply(1:3, function(x) ggRGB(marz11_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE))
-plot19 <- lapply(1:3, function(x) ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE))
+
+x <- list(1:3)
+
+
+plot20 <- lapply(1:3, function[x] ggRGB(feb20_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE)
+plot11 <- lapply(1:3, function(x) ggRGB(marz11_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE)
+plot19 <- lapply(1:3, function(x) ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE)
 
  grid.arrange(plot20[[1]],plot20[[2]], plot20[[3]], ncol=2)
  grid.arrange(plot11[[1]],plot11[[2]], plot11[[3]], ncol=2)
@@ -476,6 +480,8 @@ library(ggplot2)
 
 setwd("C:/pt/")
 
+
+                 
 # CARICO IMMAGINI COMPOSTE DA TRE LAYERS
 fg2a_feb20_imported<- brick("fig2a_wgs84.tif")
 fg2a_marz11<- brick("fig2b_wgs84.tif")
@@ -485,17 +491,12 @@ fg2a_marz19<- brick("fig2c_wgs84.tif")
 readOGR("files lavinia angelucci.shp")
 lagoon_shp <- readOGR ("files lavinia angelucci.shp")
 
-
-# plotto le immagini con RGB ### MEGLIO NEL VISIBILE CON BANDE 1,2,3 ###
+# plotto le immagini con RGB 
 plotRGB(fg2a_feb20, r=1, g=2, b=3, stretch="hist")
 plotRGB(fg2a_marz11, r=1, g=2, b=3, stretch="hist")
 plotRGB(fg2a_marz19, r=1, g=2, b=3, stretch="hist")
 
-# plotto con ggRGB
-ggRGB(fg2a_feb20,1,2,3, stretch="hist")
-ggRGB(fg2a_marz11,1,2,3, stretch="hist")
-ggRGB(fg2a_marz19,1,3,2, stretch="hist")
-### BASTA PLOTTARLE CON GRID.ARRANGE (ELIMINARE LE TRE RIGHE PRECEDENTI IL COMMENTO) ###
+# PLOT CON GRID.ARRANGE
 p1 <- ggRGB(fg2a_feb20,1,2,3, stretch="hist")
 p2 <-  ggRGB(fg2a_marz11,1,2,3, stretch="hist")
 p3 <-  ggRGB(fg2a_marz19,1,2,3, stretch="hist")
@@ -504,7 +505,7 @@ p3 <-  ggRGB(fg2a_marz19,1,2,3, stretch="hist")
 grid.arrange(p1, p2, p3, nrow=1)
 
 
-### NON è CONVENIENTE CROPPARE SUL ggRGB, è MEGLIO CROPPARE L'IMMAGINE A MONTE (COME SEGUE)
+### CROP IMMAGINI SU AREA DI STUDIO
 p1_cropped <- crop(fg2a_feb20,lagoon_shp)
 p2_cropped <- crop(fg2a_marz11,lagoon_shp)
 p3_cropped <- crop(fg2a_marz19,lagoon_shp)
@@ -517,27 +518,22 @@ grid.arrange(gg_p1_cropped, gg_p2_cropped, gg_p3_cropped, nrow=3)
 
 
 
-#PCA, analisi multivariata ### LA SI PUò FARE DIRETTAMENTE SULL'IMMAGINE CROPPATA SE USI QUELLA DA ORA IN POI ###
+#PCA, analisi multivariata ### LA SI PUò FARE DIRETTAMENTE SULL'IMMAGINE CROPPATA SE USO QUELLA DA ORA IN POI ###
 #you take a dataset with many variables, and you simplify that dataset by turning your original variables into a smaller number of "Principal Components".
 set.seed(25)
 feb20_pca <- rasterPCA(fg2a_feb20)
 marz11_pca <- rasterPCA(fg2a_marz11)
 marz19_pca <- rasterPCA(fg2a_marz19)
 
-#par(mfrow=c(1,3))
-#plot(feb20_pca$map)
-#plot(marz11_pca$map)
-#plot(marz19_pca$map)
-
 ### VEDERE SE CON HIST LE DIFFERENZE SONO MEGLIO VISUALIZZATE ###
 ggRGB(feb20_pca$map,1,2,3, stretch="lin", q=0)
 ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0)
 ggRGB(marz11_pca$map,1,2,3, stretch="lin", q=0)
-
+                                                 
 ### NON RIESCO A CAPIRE ###
-plot20 <- lapply(1:3, function(x) ggRGB(feb20_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE))
-plot11 <- lapply(1:3, function(x) ggRGB(marz11_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE))
-plot19 <- lapply(1:3, function(x) ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE))
+plot20 <- lapply(1:3, function(x) ggRGB(feb20_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE)
+plot11 <- lapply(1:3, function(x) ggRGB(marz11_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE)
+plot19 <- lapply(1:3, function(x) ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE)
 
  grid.arrange(plot20[[1]],plot20[[2]], plot20[[3]], ncol=2)
  grid.arrange(plot11[[1]],plot11[[2]], plot11[[3]], ncol=2)
