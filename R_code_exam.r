@@ -529,11 +529,15 @@ marz19_pca <- rasterPCA(fg2a_marz19)
 ggRGB(feb20_pca$map,1,2,3, stretch="lin", q=0)
 ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0)
 ggRGB(marz11_pca$map,1,2,3, stretch="lin", q=0)
-                                                 
+
+### PROVARE CON GGplot ###
+                
+
+             
 ### NON RIESCO A CAPIRE ###
-plot20 <- lapply(1:3, function(x) ggRGB(feb20_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE)
-plot11 <- lapply(1:3, function(x) ggRGB(marz11_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE)
-plot19 <- lapply(1:3, function(x) ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0), x, geom_raster = TRUE)
+plot20 <- lapply(1:3, function(x) ggRGB(feb20_pca$map,1,2,3, stretch="lin", q=0, x, geom_raster = TRUE))
+plot11 <- lapply(1:3, function(x) ggRGB(marz11_pca$map,1,2,3, stretch="lin", q=0, x, geom_raster = TRUE))
+plot19 <- lapply(1:3, function(x) ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0, x, geom_raster = TRUE))
 
  grid.arrange(plot20[[1]],plot20[[2]], plot20[[3]], ncol=2)
  grid.arrange(plot11[[1]],plot11[[2]], plot11[[3]], ncol=2)
@@ -541,24 +545,25 @@ plot19 <- lapply(1:3, function(x) ggRGB(marz19_pca$map,1,2,3, stretch="lin", q=0
  
  #grid.arrange delle 3 immagini 
  grid.arrange(plot20[[1]],plot11[[1]], plot19[[1]], ncol=2)
+                 
  
 # crop delle immagini PCA
 ### ELIMINARE LE SEGUENTI TRE RIGHE (CODICE RIDONDANTE), SI PUò SNELLIRE ANCORA LAVORANDO GIà DA PRIMA CON LE IMMAGINE CROPPATE
-crop(feb20_pca$map,lagoon_shp)
-crop(marz11_pca$map,lagoon_shp)
-crop(marz11_pca$map,lagoon_shp)
+#crop(feb20_pca$map,lagoon_shp)
+#crop(marz11_pca$map,lagoon_shp)
+#rop(marz11_pca$map,lagoon_shp)
 
-feb20crop <- crop(feb20_pca$map,lagoon_shp)
-marz11crop <- crop(marz11_pca$map,lagoon_shp)
-marz19crop <- crop(marz19_pca$map,lagoon_shp)
+#feb20crop <- crop(feb20_pca$map,lagoon_shp)
+#marz11crop <- crop(marz11_pca$map,lagoon_shp)
+#marz19crop <- crop(marz19_pca$map,lagoon_shp)
 
-feb20crop_pca <- rasterPCA(feb20crop)
-marz11crop_pca <- rasterPCA(marz11crop)
-marz19crop_pca <- rasterPCA(marz19crop)
-par(mfrow=c(1,3))
-plot(feb20crop_pca$map)
-plot(marz11crop_pca$map)
-plot(marz19crop_pca$map)
+#feb20crop_pca <- rasterPCA(feb20crop)
+#marz11crop_pca <- rasterPCA(marz11crop)
+#marz19crop_pca <- rasterPCA(marz19crop)
+#par(mfrow=c(1,3))
+#plot(feb20crop_pca$map)
+#plot(marz11crop_pca$map)
+#plot(marz19crop_pca$map)
 
 
 
@@ -570,7 +575,8 @@ plot(marz19crop_pca$map)
 feb20_pc1 <- feb20_pca$map$PC1
 marz11_pc1 <- marz11_pca$map$PC1
 marz19_pc1 <- marz19_pca$map$PC1
-### PROVARE LEVELPLOT o ggPLOT ###
+                 
+### PROVARE LEVELPLOT o ggPLOT ###                 
 par(mfrow=c(1,3))
 plot(feb20_pc1)
 plot(marz11_pc1)
@@ -656,6 +662,10 @@ summary(marz11_pca$model)
 
 
 # UNSUPERCLASS
+crop20 <- crop(fg2a_feb20,fg2a_marz19)
+crop11 <- crop(fg2a_marz11,fg2a_marz19)
+crop19 <- fg2a_marz19
+                 
 #  unsuperclass n=4 classi
 set.seed(25)
 p1_unclass <- unsuperClass(fg2a_feb20, nClasses=4)
@@ -663,8 +673,7 @@ p2_unclass <- unsuperClass(fg2a_marz11, nClasses=4)
 p3_unclass <- unsuperClass(fg2a_marz19, nClasses=4)
 
 #plotta con par
-### NON SERVE SET.SEED QUI ###
-set.seed(25)
+
  par(mfrow=c(1,3))
 plot(p1_unclass$map)
 plot(p2_unclass$map)
@@ -691,10 +700,6 @@ plot(p3_unclass$map)
 # derivati dal numero di pixel diverso
 
 ### METTERE QUESTO ALL'INIZIO E POI LANCIARE UNSUPERCLASS, POSSIBILMENTE UTILIZZARE DIRETTAMENTE IL CROP CON LO SHP SEMPLIFICANDO IL TUTTO SENZA RICROPPARE ###
-crop20 <- crop(fg2a_feb20,fg2a_marz19)
-crop11 <- crop(fg2a_marz11,fg2a_marz19)
-crop19 <- fg2a_marz19
-
 unclass19 <- unsuperClass(crop19, nClasses=4)
 unclass11 <- unsuperClass(crop11, nClasses=4)
 unclass20 <- unsuperClass(crop20, nClasses=4)
@@ -726,7 +731,7 @@ plot(unclass20$map)
 [4,]     4 161689
 
 # se divido freq per il numero totale di pixel me lo trova per tutte le classi in automatico 
-posso fare o una divisione oppure associamo il numero totale di pixel ad un oggetto 
+#posso fare o una divisione oppure associamo il numero totale di pixel ad un oggetto 
 
 # associo il n tot di pixel ad un oggetto 
 tot_pix <- 267000
