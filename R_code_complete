@@ -1,17 +1,17 @@
 # R_code_complete_telerilevamento geoecologico 2020/2021
 
 # SUMMARY 
-# 1. remote sensing summary 
+# 1. R code remote sensing summary 
 # 2. R code time series 
 # 3. R code copernicus 
-# 4. R code knit R 
+# 4. R code knitR 
 # 5. R code multivariat analysis
 # 6. R code classification 
 # 7. R code ggplot2 
 # 8. R code vegetation index
 # 9. R code land cover 
 # 10. R code variability 
-# 11 R code spectral signatures
+# 11. R code spectral signatures
 #------------------------------------------------------
 
 # R_code_remote_sensing
@@ -54,6 +54,7 @@ p224r63_2011 <- brick("p224r63_2011_masked.grd")
 # utilizziamo la colorrapmpalette
 cls <- colorRampPalette(c("red","pink","orange","purple")) (200)
 
+# visualizzo l'immagine con funzione plot
 plot(p224r63_2011, col=cls)
 
 # interroghiamo l'immagine p224r63_2011 per vedere tutte le bande di Landsat che la compongono 
@@ -69,7 +70,7 @@ plot(p224r63_2011, col=cls)
 # per eliminare la grafica precedente
 dev.off()
 
-# plot band 1 with a predefined colorramppalette, con il $ intendiamo funzione unione in questo caso uniamo l'immagine alla banda B1 (utilizza la funzione di partenza plot(p224r63_2011, col=cl))  
+# plot banda 1 con colorramppalette, con il $ intendiamo funzione unione in questo caso uniamo l'immagine alla banda B1 (utilizza la funzione di partenza plot(p224r63_2011, col=cl))  
 plot(p224r63_2011$B1_sre, col=cls)
 
 # funzione PAR per banda B1 e B2 con funzione mfrow visualizzi #1=RIGHE #2=COLONNE. Serve a visualizzare le immagini una accanto all’altra nel software
@@ -136,11 +137,8 @@ plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 
 # per visualizzare le bande RGB con stretch lineare
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
-
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
-
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
-
 plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 
 # Exercise: mount a 2x2 multiframe (mf) inseriamo il numero di colonne e righe attraverso cui divdiamo l’immagine 
@@ -214,30 +212,22 @@ setwd("C:/lab/greenland")
 # usiamo la funzione "raster" per creare un pacchetto di layer in immagini raster attraverso il caricamento di singoli dati. 
 # La funzione RASTER è tipo BRICK infatti “usciamo” da R con le virgolette e portiamo dentro R i file che ci interessano attraverso la funzione raster. 
 lst_2000 <- raster("lst_2000.tif")
-plot(lst_2000)
-
 lst_2005 <- raster("lst_2005.tif")
-plot(lst_2005)
-
 lst_2010 <- raster("lst_2010.tif")
-plot(lst_2010)
-
 lst_2015 <- raster("lst_2015.tif")
+plot(lst_2005)
+plot(lst_2000)
+plot(lst_2010)
 plot(lst_2015)
 
 # funzione PAR per plottare matrice di immagini **guarda riga 83**
 par(mfrow=c(2,2))
-lst_2000 <- raster("lst_2000.tif")
 plot(lst_2000)
-lst_2005 <- raster("lst_2005.tif")
 plot(lst_2005)
-lst_2010 <- raster("lst_2010.tif")
 plot(lst_2010)
-lst_2015 <- raster("lst_2015.tif")
 plot(lst_2015)
 
 # using LIST and PATTERN functions per fare una lista di files raster 
-
 rlist <- list.files(pattern="lst")
 
 # LAPPLY function using list e plottiamo l'immagine mi permette di applicare una deterinata funzione 
@@ -249,7 +239,6 @@ import <- lapply(rlist,raster)
 
 # attraverso funzione stack importamo la lista precedentemente elaborata con lapply e la nominiamo TGr
 TGr <- stack(import)
-
 plot(TGr)
 
 # DAY 2 
@@ -257,8 +246,9 @@ plot(TGr)
 library(rasterVis)  
 library(raster)  # per caricare in R immagini raster 
 setwd("C:/lab/greenland") # working directory
+install.packages("rgdal")# plottiamo una singola immagine attraverso il pacchetto "rgdal"
 
-# codice per importare immagini 
+# codice per importare immagini con funzione lapply
 rlist <- list.files(pattern="lst")
 rlist
 import <- lapply(rlist,raster)
@@ -271,12 +261,8 @@ TGr
 # visualizziamo inoltre i livelli di contorno
 # Si può usare per esempio per visualizzare l’innalzamento della temperatura **guarda groenlandia**
 
-levelplot(TGr)
-
-# plottiamo una singola immagine attraverso il pacchetto "rgdal"
-install.packages("rgdal")
-
 # funzione level plot
+levelplot(TGr)
 levelplot(TGr$lst_2000)
 
 # usiamo la colorramppalette per riplottare l'immagine
@@ -331,7 +317,7 @@ plot(albedo, col=cl)
 
 # ricampionamento della variabile albedo attraverso un fattore "fact" per aggregare dati del file in uscita
 # la funzione aggregate(xxx, fact=n° celle) permette di unire più celle fra di loro infatti 100 equivale alle celle di pixel che "fondi assieme" 
-# albedores <- aggregate(albedo, fact=100)
+ albedores <- aggregate(albedo, fact=100)
 
 # plottiamo la nuova variabile albedores 
 plot(albedores, col=cl)
@@ -366,25 +352,27 @@ p224r63_2011 <- brick("p224r63_2011_masked.grd")
 plot(p224r63_2011)
 p224r63_2011
 
+#plot dell'immagine 
 plot(p224r63_2011$B1_sre, p224r63_2011$B2_sre, col="red", pch=19, cex=2)
 plot(p224r63_2011$B2_sre, p224r63_2011$B1_sre, col="red", pch=19, cex=2)
-
 pairs(p224r63_2011)
 
-# aggregate cells resampling (ricampionamento) **guarda riga 351**
+# aggregate cells resampling (ricampionamento) 
 p224r63_2011res <- aggregate(p224r63_2011, fact=10)
 
-# funzione par 2righe 1colonna **guarda riga 84** con stretch lineare **guarda riga 171**
+# funzione par 2righe 1colonna con stretch lineare 
 par(mfrow=c(2,1))
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="lin")
 plotRGB(p224r63_2011res, r=4, g=3, b=2, stretch="lin")
 
-# funzione raster
+# funzione rasterPCA per "principal component analisys"
 p224r63_2011res_pca <- rasterPCA(p224r63_2011res)
 
 # la funzione summary mostra sommario dati della mappa selezionata unita attraverso $ a model
 summary(p224r63_2011res_pca$model)
 dev.off()
+
+#plot dell'immagine
 plotRGB(p224r63_2011res_pca$map, r=1, g=2, b=3, stretch="lin")
  
  #-------------------------------------------------------------
@@ -458,10 +446,10 @@ library(ggplot2) # per plot con ggRGB
 library(gridExtra) # con funzione grid.arrange
 setwd("~/lab/") # working directory
 
-#usiamo la funzione brick *guarda prima*
+#usiamo la funzione brick
 p224r63 <- brick("p224r63_2011_masked.grd")
 
-# usiamo la funzione stretch lin * guarda prima*
+# usiamo la funzione stretch lin 
 ggRGB(p224r63,3,2,1, stretch="lin")
 ggRGB(p224r63,4,3,2, stretch="lin")
 
@@ -498,7 +486,7 @@ plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
 # usiamo la "different vegetation index" dell'immagine 1 div1 per ottenere un immagine e visualizzare differenza dell'infrarosso e il rosso 
 # NDVI è un indice "quantitativo", da informazioni circa il range di "greenness" ranging da 0-1
 # NDVI= 1 -> massimo grado di "greennes" 
-#NDVI =0 -> minimo grado di "greennes"
+# NDVI =0 -> minimo grado di "greennes"
 # NDVI è spesso usata per avere informazioni quantitative circa lo stato della vegetazione su larghe scale
 
  dvi1 <- defor1$defor1.1 - defor1$defor1.2
@@ -541,16 +529,14 @@ plot(ndvi1, col=cl)
 ndvi2 <- (defor2$defor2.1 - defor2$defor2.2) / (defor2$defor2.1 + defor2$defor2.2)
 plot(ndvi2, col=cl)
 
-# usiamo la funzione "spectral indices" con "vi1" e plottiamo con la colorramppalette "col"
+# usiamo la funzione "spectral indices" con "vi1" e "vi2" e plottiamo con la colorramppalette "col"
 # permette di calcolare tutti gli indici insieme invece che uno alla volta
 vi <- spectralIndices(defor1, green = 3, red = 2, nir = 1)
-plot(vi, col=cl)
-
-# usciamo la funzioe "spectral indices" con "vi2" e plottiamo
 vi2 <- spectralIndices(defor2, green = 3, red = 2, nir = 1)
+plot(vi, col=cl)
 plot(vi2, col=cl)
 
-plottiamo con la funzione ndvi
+# plottiamo con la funzione ndvi
 difndvi <- ndvi1 - ndvi2
 cld <- colorRampPalette(c('blue','white','red'))(100) 
 plot(difndvi, col=cld)
@@ -621,14 +607,14 @@ plot(d1c$map)
 
 #con la funzione "set.seed" il  nostro codice riproduce lo stesso set di numeri casuali
 # tra () inseriamo come argomento un numero intero (arbitrario).
-# set.seed() 
 
+set.seed() 
 d2c <- unsuperClass(defor2, nClasses=2)
+d2c3 <- unsuperClass(defor2, nClasses=3)
 plot(d2c$map)
+plot(d2c3$map)
 # classe 1: agriculture
 # classe 2: forest
-d2c3 <- unsuperClass(defor2, nClasses=3)
-plot(d2c3$map)
 
 # con la funzione "freq" esaminiamo la frequenza dell'immagine precedentemente studiata con "unsuperclass"
 # in questo modo assegnamo i valori numerici (grazie a funzione "freq") alle classi (in questo caso sono due [1] e [2])
@@ -651,7 +637,6 @@ prop2 <- freq(d2c$map) / s2
 cover <- c("Forest","Agriculture")
 percent_1992 <- c(89.83, 10.16)
 percent_2006 <- c(52.06, 47.93)
-
 percentages <- data.frame(cover, percent_1992, percent_2006)
 percentages
 
@@ -763,10 +748,11 @@ pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
 # utiliziamo una color ramppalette e plottiamo l'immagine 
 clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) 
 plot(pc1sd3, col=clsd)
-# pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
-# clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) # 
-# plot(pc1sd5, col=clsd)
 
+# funzione focal matrice 5x5 e colorrampopalette 
+ pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
+ clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) # 
+ plot(pc1sd5, col=clsd)
 
 # prepariamo il codice salviamolo nel server e usiamo la funzione "source" per recuperare facilmente il file su R
 # prepariamo un altro codice e portiamolo in r con la funzione "source"
@@ -777,20 +763,14 @@ source("source_ggplot.r")
 # aggiungiamo a ggplot() con + a una geometria (punti, linee, poligoni, pixel raster ecc..) in questo caso usiamo la funzione geom_raster con oggetto la mappa PCA
 # definiamo le "estetiche" (aes) ossia il layer che vogliamo mappare attraverso la funzione "mapping"
 # le aes avrà coordinate geografiche x y e riempimento: x= x y=y riempimento = layer)
-ggplot() +
-geom_raster(pc1sd3, mapping = aes(x = x, y = y, fill = layer))
-
 # usiamo una delle legende di viridis per dichiarare una colorappalette senza citarla nel codice
-scale_fill_viridis()
-ggtitle("Standard deviation of PC1 by viridis colour scale")
-
 # utiliziamo "magma" come colour scale attraverso la funzione "option = magma"
 ggplot() +
 geom_raster(pc1sd3, mapping = aes(x = x, y = y, fill = layer)) +
 scale_fill_viridis(option = "magma") +
 ggtitle("Standard deviation of PC1 by magma colour scale")
 
-# inseriamo più grafici in una pagina attraverso funzione "grid.arrange" e la library "library(gridExtra)"
+# inseriamo più grafici in una pagina attraverso funzione "grid.arrange" #library "(gridExtra)"
 grid.arrange(p1, p2, p3, nrow = 1)
 
 #------------------------------------------------------------------------------------------------------------------ 
