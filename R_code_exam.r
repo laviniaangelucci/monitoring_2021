@@ -12,7 +12,7 @@ library(RStoolbox)
 library(ggplot2) #per ggplot
 setwd("C:/pt/") # working directory
                  
-# carico immagini da 3 layer suo brick
+# carico immagini da 3 layer con funzione brick
 fg2a_feb20<- brick("fig2a_wgs84.tif")
 fg2a_marz11<- brick("fig2b_wgs84.tif")
 fg2a_marz19<- brick("fig2c_wgs84.tif")
@@ -43,7 +43,7 @@ gg_p2_cropped <- ggRGB(p2_cropped,1,2,3, stretch="hist")
 gg_p3_cropped <- ggRGB(p3_cropped,1,2,3, stretch="hist")
 grid.arrange(gg_p1_cropped, gg_p2_cropped, gg_p3_cropped, nrow=1)
 
-#PCA, analisi multivariata 
+#PCA, analisi delle componenti 
 set.seed(25)
 feb20_pca <- rasterPCA(fg2a_feb20)
 marz11_pca <- rasterPCA(fg2a_marz11)
@@ -109,7 +109,7 @@ geom_raster(marz19_mw, mapping = aes(x = x, y = y, fill = layer)) +
 scale_fill_viridis(option="turbo") +
 ggtitle("ggplot 19 MARZO")
                  
-# colramppalettelocalmente 
+# colorramppalette
 clsd <- colorRampPalette(c('blue','green','pink','red','orange','yellow'))(100)
 par(mfrow=c(1,3))
 plot(feb20_mw, col=clsd)
@@ -124,6 +124,7 @@ set.seed(25)
 unclass20 <- unsuperClass(crop20, nClasses=4)
 unclass11 <- unsuperClass(crop11, nClasses=4)
 unclass19 <- unsuperClass(crop19, nClasses=4)
+
 # plot con funzione par
 par(mfrow=c(1,3))
 plot(unclass19$map)
