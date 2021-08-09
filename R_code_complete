@@ -170,6 +170,8 @@ plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
 
 ### DAY5 
+library(raster) #import raster
+setwd("C:/lab/") # working directory
 
 # Multitemporal set 
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
@@ -314,7 +316,7 @@ levelplot(melt_amount, col.regions=clb)
 # R_code_copernicus.r
 # visualizing Copernicus data
 
-# library(raster)
+library(raster)
 install.packages("ncdf4") # installiamo il nuovo pacchetto in R 
 library(ncdf4) # Carico il nuovo pacchetto in R 
 setwd("C:/lab/") # selezioniamo la woorking directory
@@ -341,8 +343,7 @@ plot(albedores, col=cl)
 
 # R_code_knitr.r
 
-# inseriamo i dati in R dalla cartella lab 
-setwd("C:/lab/")
+setwd("C:/lab/") # working directory
 library(knitr) # library per generare lo script
 
 # generare report partendo da script.r
@@ -798,8 +799,8 @@ grid.arrange(p1, p2, p3, nrow = 1)
 
 # carico le library
 library(raster)
-library(rgdal)
-library(ggplot2)
+library(rgdal) # import R raste o vettori
+library(ggplot2) # plot di raster layers
 setwd("C:/lab/") # setto woking directory
 
 # carico immagine su R attraverso funzione "brick"
@@ -891,9 +892,9 @@ geom_line(aes(y=time2), linetype="dotted") + geom_line(aes(y=time2p2), linetype=
 
 
 # porto all'interno di R l'immagine di Earth Observatory con funzione brick
-
 eo <- brick("june_puzzler.jpg")
 plotRGB(eo, 1,2,3, stretch="hist")
+
 # funione click funzione click  per identificare dei valori di un oggetto raster in un determinato punto (in questo caso eo) 
 click(eo, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
 
