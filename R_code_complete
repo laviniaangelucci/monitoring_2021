@@ -5,10 +5,10 @@
 # 2. R code time series 
 # 3. R code copernicus 
 # 4. R code knit R 
-# 5. R code multivariat analysis  (MISSING)
+# 5. R code multivariat analysis
 # 6. R code classification 
 # 7. R code ggplot2 
-# 8. R code vegetation index  (DAY 1 IS MISSING)
+# 8. R code vegetation index
 # 9. R code land cover 
 # 10. R code variability 
 # 11 R code spectral signatures
@@ -19,14 +19,9 @@
 
 # il mio primo codice per il telerilevamento 
 
-# codice per installazione pacchetti aggiuntivi raster 
-install.packages("raster")
-
-# funzione library per richiamare il pacchetto raster 
-library(raster)
-
-# indicare la cartella da cui estrarre i dati 
-setwd("C:/lab/")
+install.packages("raster") # codice per installazione pacchetti aggiuntivi raster 
+library(raster) # funzione library per richiamare il pacchetto raster 
+setwd("C:/lab/") # indicare la cartella da cui estrarre i dati 
 
 # funzione brick per importare il file su R e p224r63_2011 <- è il nuovo nome che diamo al nuovo oggetto caricato
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
@@ -50,11 +45,8 @@ cl <- colorRampPalette(c("black","blue","green","pink","yellow","violet")) (100)
 
 ### DAY 3
 
-# carico pacchetto di dati raster in R
-library(raster)
-
-# seleziono la cartella nel mio sistema operativo da cui il software recupera i dati (cartella lab in :C)
-setwd("C:/lab/")
+library(raster) # carico pacchetto di dati raster in R
+setwd("C:/lab/") # seleziono la cartella nel mio sistema operativo da cui il software recupera i dati (cartella lab in :C)
 
 # localizzo i dati e carico immagini su R con funzione brick per importare il file su R e p224r63_2011 <- è il nome che diamo al nuovo oggetto caricato
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
@@ -126,9 +118,8 @@ plot(p224r63_2011$B4_sre, col=clnir)
 #### DAY 4 
 # visualizing data by RGB plotting
 
-library(raster)
-
-setwd("C:/lab/")
+library(raster) #import raster
+setwd("C:/lab/") # working directory
 
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
@@ -215,14 +206,11 @@ plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")
 
 # installiamo i pacchetti file e inseriamoli con library in R 
 install.packages("raster")
-
 library(raster)
-
 setwd("C:/lab/greenland")
 
-# we are using the RASTER function per creare un pacchetto di layer in immagini raster attraverso il caricamento di singoli dati. 
+# usiamo la funzione "raster" per creare un pacchetto di layer in immagini raster attraverso il caricamento di singoli dati. 
 # La funzione RASTER è tipo BRICK infatti “usciamo” da R con le virgolette e portiamo dentro R i file che ci interessano attraverso la funzione raster. 
-
 lst_2000 <- raster("lst_2000.tif")
 plot(lst_2000)
 
@@ -264,12 +252,11 @@ plot(TGr)
 
 # DAY 2 
 
-library(rasterVis)
-library(raster)
-setwd("C:/lab/greenland") 
+library(rasterVis)  
+library(raster)  # per caricare in R immagini raster 
+setwd("C:/lab/greenland") # working directory
 
 # codice per importare immagini 
-
 rlist <- list.files(pattern="lst")
 rlist
 import <- lapply(rlist,raster)
@@ -324,20 +311,13 @@ levelplot(melt_amount, col.regions=clb)
 
 # R_code_copernicus
 # 3. R code dopernicus third code
-
 # R_code_copernicus.r
 # visualizing Copernicus data
 
 # library(raster)
-
-# installiamo il nuovo pacchetto in R 
-install.packages("ncdf4")
-
-# Carico il nuovo pacchetto in R 
-library(ncdf4)
-
-# selezioniamo la cartella lab 
-setwd("C:/lab/")
+install.packages("ncdf4") # installiamo il nuovo pacchetto in R 
+library(ncdf4) # Carico il nuovo pacchetto in R 
+setwd("C:/lab/") # selezioniamo la woorking directory
 
 # carichiamo il file scaricato da Copernicus in R 
 # (L'albedo di una superficie è la frazione di luce o, più in generale, di radiazione solare incidente che è riflessa in tutte le direzioni)
@@ -363,10 +343,9 @@ plot(albedores, col=cl)
 
 # inseriamo i dati in R dalla cartella lab 
 setwd("C:/lab/")
+library(knitr) # library per generare lo script
 
-library(knitr)
-
-# generare report partendo da script .r
+# generare report partendo da script.r
 stitch("R_code_time_series.r", template=system.file("misc", "knitr-template.Rnw", package="knitr"))
 
 #-------------------------------------------------------------
@@ -376,17 +355,14 @@ stitch("R_code_time_series.r", template=system.file("misc", "knitr-template.Rnw"
  
  # R_code_multivariate_analysis.r
 
-library(raster)
-library(RStoolbox)
+library(raster) # import raster
+install.packages("RStoolbox") # installiamo RStoolbox 
+library(RStoolbox) #calcolo indici spettrali 
+setwd("C:/lab/") # working directory
 
-setwd("~/lab/") # Linux
-# setwd("C:/lab/") # Windows
-# setwd("/Users/name/Desktop/lab/") # Mac 
-
+# carichiamo le immagini con brick per 3 layer immagini
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
-
 plot(p224r63_2011)
-
 p224r63_2011
 
 plot(p224r63_2011$B1_sre, p224r63_2011$B2_sre, col="red", pch=19, cex=2)
@@ -407,8 +383,7 @@ p224r63_2011res_pca <- rasterPCA(p224r63_2011res)
 
 # la funzione summary mostra sommario dati della mappa selezionata unita attraverso $ a model
 summary(p224r63_2011res_pca$model)
-
-# dev.off()
+dev.off()
 plotRGB(p224r63_2011res_pca$map, r=1, g=2, b=3, stretch="lin")
  
  #-------------------------------------------------------------
@@ -419,10 +394,9 @@ plotRGB(p224r63_2011res_pca$map, r=1, g=2, b=3, stretch="lin")
  # R_code_classification.r
 
 # DAY 1 SOLAR ORBITER
-
-# settiamo la working directory che stiamo utilizzando 
-setwd("C:/lab/")
-library(raster)
+setwd("C:/lab/") # settiamo la working directory 
+library(raster) # import raster
+library(RStoolbox) #calcolo indici spettrali 
 
 # usiamo la funzione brick per importare su R i dati del pacchetto raster
 so <- brick("Solar_Orbiter_s_first_views_of_the_Sun_pillars.jpg")
@@ -431,9 +405,6 @@ so
 # visualiziamo i tre livelli RGB dell'immagine attraverso la funzione PLOT con stretch lineare
 plotRGB(so, 1, 2, 3, stretch="lin")
 
-# installiamo RStoolbox 
-install.packages("RStoolbox")
-library(RStoolbox)
 
 # "unsupervised classification" dell'immagine con n.3 classi
 soc <- unsuperClass(so, nClasses=3)
@@ -446,7 +417,7 @@ soc20 <- unsuperClass(so, nClasses=20)
 plot(soc20$map)
 
 # scarichiamo immagine dal programma "SolarOrbiter"
-https://www.esa.int/ESA_Multimedia/Missions/Solar_Orbiter/(result_type)/images
+# https://www.esa.int/ESA_Multimedia/Missions/Solar_Orbiter/(result_type)/images
 
 # portiamo l'immagine all'interno di R e plottiamo l'immagine con n.20 classi
 sun <- brick("sun.png") 
@@ -454,10 +425,10 @@ sunc <- unsuperClass(sun, nClasses=20)
 plot(sun.png$map)
 
 # DAY 2 GRAND CANYON
-
-# settiamo la working directory 
- setwd("C:/lab/")
+setwd("C:/lab/") # settiamo la working directory
 library(raster)
+install.packages("RStoolbox") # installo RStoolbox 
+library(RStoolbox)
 
 # portiamo l'immagine del Grand Canyon all'interno di R attraverso la funzione "brick" 
 gc <- brick("dolansprings_oli_2013088_canyon_lrg.jpg")
@@ -465,10 +436,6 @@ gc <- brick("dolansprings_oli_2013088_canyon_lrg.jpg")
 # plottiamo l'immagine attraverso funzione "RGB" con stretch lineare e stretch "hist" che presenta uno "slope" più "ripido" rispetto allo stretching lineare **guarda lezioni prec.**
 plotRGB(gc, r=1, g=2, b=3, stretch="lin")
 plotRGB(gc, r=1, g=2, b=3, stretch="hist")
-
-# installo RStoolbox 
-install.packages("RStoolbox")
-library(RStoolbox)
 
 # utiliziamo la funzione "unsuperClass" con n. 2 di classi di colore per classificare l'immagine e plottiamo successivamente
 gcc2 <- unsuperClass(gc, nClasses=2)
@@ -483,11 +450,12 @@ plot(gcc4$map)
 
 # R_code_ggplot2 
 # 7. R code ggplot 2 seventh code
+
 library(raster)
 library(RStoolbox)
-library(ggplot2)
-library(gridExtra)
-setwd("~/lab/")
+library(ggplot2) # per plot con ggRGB 
+library(gridExtra) # con funzione grid.arrange
+setwd("~/lab/") # working directory
 
 #usiamo la funzione brick *guarda prima*
 p224r63 <- brick("p224r63_2011_masked.grd")
@@ -508,15 +476,12 @@ grid.arrange(p1, p2, nrow = 2)
 # R_code_vegetetion_index
 # 8. R code vegetation index eighth code
 
-# set della workingdirectory 
+# set della workingdirectory  # carichiamo i pacchetti raster di nostro interesse
 setwd("C:/lab/") 
-# carichiamo i pacchetti raster di nostro interesse
 library(raster)
-library(RStoolbox)  # peer calcolare indice di vegetazione
+library(RStoolbox)  # per calcolare indice di vegetazione
 install.packages("rasterdiv")
 library(rasterdiv) # per fare NDVI 
-# install.packages("rasterVis")
-library(rasterVis)
 
 # lavoriamo con immagini della foresta amazonica di NASA portiamo all'interno di R le immagini con funzione "brick"
 defor1 <- brick("defor1.jpg")
@@ -575,8 +540,6 @@ plot(ndvi1, col=cl)
 ndvi2 <- (defor2$defor2.1 - defor2$defor2.2) / (defor2$defor2.1 + defor2$defor2.2)
 plot(ndvi2, col=cl)
 
-# library(RStoolbox)  # acchetto RStoolbox necessario
-
 # usiamo la funzione "spectral indices" con "vi1" e plottiamo con la colorramppalette "col"
 # permette di calcolare tutti gli indici insieme invece che uno alla volta
 vi <- spectralIndices(defor1, green = 3, red = 2, nir = 1)
@@ -593,8 +556,9 @@ plot(difndvi, col=cld)
 
 
 # DAY 3 
+
 install.packages("rasterdiv") # pacchetto di files "rasterdiv" per la visualizzazione di worllwide NDVI  
-library(rasterdiv)
+library(rasterdiv) # per levelplot
 
 # plottiamo il set NDVI (Normalized Difference Vegetation Index)
 plot(copNDVI)
@@ -602,12 +566,9 @@ plot(copNDVI)
 # riclassifichiamo l'immagine originale "copNDVI" in modo che valori di pixel 253:255 risultino NA (non classificati)
 copNDVI <- reclassify(copNDVI, cbind(253:255, NA))
 
-# plottiamo nuovamente l'immagine
+# plottiamo nuovamente l'immagine 
 plot(copNDVI)
-
-# utilizziamo il pacchetto " rasterVis" per fare un "levelplot"
-library(rasterVis)
-levelplot(copNDVI)
+levelplot(copNDVI) # level plot
  
  #-------------------------------------------
  
@@ -616,20 +577,14 @@ levelplot(copNDVI)
 
 # R_code_land_cover.r
 
-library(raster)
-library(RStoolbox)
+install.packages ("ggplot2") # installiamo il pacchetto ggplot e richiamiamo un altra libreria "ggplot"
 library(ggplot2)
-
+install.packages("gridExtra") # "GreenExtra" che permette di utilizzare ggplot per dati raster
+library(gridExtra)
+library(raster)
+library(RStoolbox) # richiamiamo le librerie dati "raster" e "RStoolbox" per fare la classificazione 
 # inseriamo la workingdirectory
 setwd("C:/lab/")
-
-# richiamiamo le librerie dati "raster" e "RStoolbox" per fare la classificazione 
-library(raster)
-library(RStoolbox)
-
-# installiamo il pacchetto ggplot e richiamiamo un altra libreria "ggplot"
-install.packages("ggplot2")
-library(ggplot2)
 
 # richiamiamo il dataset defort1 attraverso la funzione "brick"  
 defor1 <- brick("defor1.png")
@@ -651,15 +606,10 @@ par(mfrow=c(1,2))
 plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
 plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
 
-
-install.packages("gridExtra") # "GreenExtra" che permette di utilizzare ggplot per dati raster
-library(gridExtra)
-
 # facciamo un multiframe per visualizzare defort1 e defort2 insieme attraverso la funzione "ggplot" e "grid.arrange" (mette insieme diverse sezioni all'interno del grafico in R)
 p1 <- ggRGB(defor1, r=1, g=2, b=3, stretch="lin")
 p2 <- ggRGB(defor2, r=1, g=2, b=3, stretch="lin")
 grid.arrange(p1, p2, nrow=2)
-
 
 # "unsupervised classification" **guarda cap 6**
 d1c <- unsuperClass(defor1, nClasses=2)
@@ -723,7 +673,6 @@ grid.arrange(p1, p2, nrow=1)
 # settiamo la working directory e le library
 library(raster)
 library(RStoolbox)
-# install.packages("RStoolbox")
 setwd("C:/lab/")
 
 # portiamo in R l'immagine "sentinel.png" attraverso la funzione brik
@@ -786,10 +735,10 @@ summary(sentpca$model) # la prima componente spiega il 6736804 % della variabili
 # settiamo la working directory e le library
 library(raster)
 library(RStoolbox)
-setwd("C:/lab/") # install.packages("RStoolbox")
+setwd("C:/lab/") # working directory
 library(ggplot2) # settiamo la library ggplot
-library(gridExtra) # libreria per plottare ggplot insieme 
-install.packages("viridis") # installiamo la libreria per plottare colorato automaticamente 
+library(gridExtra) # libreria per plottare ggplot insieme grid.arrange 
+install.packages("viridis") # installiamo la libreria per plottare colorato con ggplot palette di viridis 
 library (viridis)
 
 # portiamo in R l'immagine "sentinel.png" attraverso la funzione brik
@@ -851,13 +800,12 @@ grid.arrange(p1, p2, p3, nrow = 1)
 library(raster)
 library(rgdal)
 library(ggplot2)
-# setto woking directory
-setwd("C:/lab/") # windows
+setwd("C:/lab/") # setto woking directory
 
 # carico immagine su R attraverso funzione "brick"
 defor2 <- brick("defor2.jpg")
-
 defor2
+
 # defor2.1, defor2.2, defor2.3 
 # NIR, red, green
 
@@ -885,11 +833,9 @@ spectrals <- data.frame(band, forest, water)
 # plottiamo "sepctral signatures" con geometrie lineari per costruire il grafico
 ggplot(spectrals, aes(x=band)) + geom_line(aes(y=forest), color="green") + geom_line(aes(y=water), color="blue") +
  labs(x="band",y="reflectance")
-
-############### Multitemporal
+ 
 # ANALISI MULTITEMPORALE
-
-########### T1
+##T1
 #funzionne brick per importare immagine defor1 dentro R
 defor1 <- brick("defor1.jpg")
 
@@ -912,7 +858,7 @@ click(defor1, id=T, xy=T, cell=T, type="p", pch=16, col="yellow")
 # 1 76.5 374.5 73619      224       21       41
 
 
-################### T2
+##T2
 # plot e funzione cick per defor2 
 plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
 #funzione click  per identificare dei valori di un oggetto raster in un determinato punto (in questo caso defor2) 
@@ -968,7 +914,7 @@ stratum3 <- c(41,40,20)
 
 spectralsg <- data.frame(band, stratum1, stratum2, stratum3)
 
-# polliamo sepctral signatures con geometrie lineari
+# plottiamo sepctral signatures con geometrie lineari
 ggplot(spectralsg, aes(x=band)) + geom_line(aes(y=stratum1), color="yellow") + geom_line(aes(y=stratum2), color="green") +
  geom_line(aes(y=stratum3), color="blue") +
  labs(x="band",y="reflectance")
