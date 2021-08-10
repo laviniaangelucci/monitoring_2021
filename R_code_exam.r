@@ -88,7 +88,7 @@ marz19_pc1 <- marz19_pca$map$PC1
 levelplot(feb20_pc1)
 levelplot(marz11_pc1)
 levelplot(marz19_pc1)
-dev.of()
+dev.off()
 
 # funzione focal moving window
 feb20_mw <- focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
