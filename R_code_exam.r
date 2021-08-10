@@ -6,9 +6,9 @@ install.packages("viridis")
 library (viridis) #per palette colori
 library(raster) #per oggetti raster
 library(rasterVis) #per levelplot
-library(rgdal)
-library(gridExtra)
-library(RStoolbox)
+library(rgdal) #import raster or vectors
+library(gridExtra) # grid.arrange
+library(RStoolbox) # classificazione
 library(ggplot2) #per ggplot
 setwd("C:/pt/") # working directory
                  
