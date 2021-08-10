@@ -3,7 +3,7 @@
 
 # library         
 install.packages("viridis")
-library (viridis) #per palette colori
+library(viridis) #per palette colori
 library(raster) #per oggetti raster
 library(rasterVis) #per levelplot
 library(rgdal) #import raster or vectors
@@ -91,9 +91,9 @@ levelplot(marz19_pc1)
 dev.off()
 
 # funzione focal moving window
-feb20_mw <- focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
-marz11_mw <- focal (marz11_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
-marz19_mw <- focal (marz19_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+feb20_mw <-focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+marz11_mw <-focal (marz11_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+marz19_mw <-focal (marz19_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
                  
 #ggplot con viridis opzione turbo
 ggplot() +
